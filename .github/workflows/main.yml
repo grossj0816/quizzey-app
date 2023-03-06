@@ -17,16 +17,13 @@ jobs:
   build:
       #The type of runner that the job will run on
       runs-on: unbuntu-latest
-      strategy:
-        matrix:
-          node-version: [18.14.2]
 
       steps:
         #Uses the specific node version provided abo           
-        - name: Use Node.js ${{ matrix.node-version }}
+        - name: Use Node.js 18
           uses: actions/setup-node@v3
           with:
-            node-version: ${{ matrix.node-version }}
+            node-version: 18
         
         #Checks out your repository
         - name: Git checkout
