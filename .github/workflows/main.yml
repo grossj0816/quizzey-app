@@ -32,20 +32,20 @@ jobs:
           
         #Install packages
         - name: Install packages
-          working-directory: /juwans-portfolio
+          working-directory: ../../juwans-portfolio
           run: |
             npm install
           
         #Build an optimized prod build               
         - name: Production build
-          working-directory: /juwans-portfolio
+          working-directory: ../../juwans-portfolio
           run:  |
             unset CI
             npm run build
         
         #Deploy terraform code to provision infrastructure
         - name: Deploy Terraform
-          working-directory: /juwans-portfolio/terraform
+          working-directory:  ../../juwans-portfolio/terraform
           run:  |
             rm -fr terraform.tfstate || echo 'Does not exist'
             terraform init -input=false
