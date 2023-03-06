@@ -33,6 +33,7 @@ jobs:
         #Install packages
         - name: Install packages
           run: |
+            npm init
             npm install
           
         #Build an optimized prod build               
