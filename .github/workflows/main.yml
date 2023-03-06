@@ -46,6 +46,7 @@ jobs:
             #Deploy terraform code to provision infrastructure
             - name: Deploy Terraform
               run:  |
+                cd juwans-portfolio/terraform/
                 rm -fr terraform.tfstate || echo 'Does not exist'
                 terraform init -input=false
                 terraform workspace new ${GITHUB_REF##*/} || echo 'Already exists'
