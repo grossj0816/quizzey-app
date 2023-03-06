@@ -42,6 +42,13 @@ jobs:
               run:  |
                unset CI
                npm run build
+
+            - name: Deploy Terraform
+              run:  |
+                rm -fr terraform.tfstate || echo 'Does not exist'
+                terraform init -input=false
+                terraform workspace new ${GITHUB_REF##*/} || echo 'Already exists'
+                terraform workspace select ${GITHUB_REF##*/} && terraform apply -input=false -auto-approve
                
             - name: Deploy to S3
               uses: jakejarvis/s3-sync-action@master
