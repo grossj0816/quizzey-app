@@ -30,22 +30,23 @@ jobs:
         - name: Git checkout
           uses: actions/checkout@v3
           
-        # #Install packages
-        # - name: Install packages
-        #   run: |
-        #     npm install
+        #Install packages
+        - name: Install packages
+          working-directory: /juwans-portfolio
+          run: |
+            npm install
           
         #Build an optimized prod build               
         - name: Production build
+          working-directory: /juwans-portfolio
           run:  |
-            npm install
             unset CI
             npm run build
         
         #Deploy terraform code to provision infrastructure
         - name: Deploy Terraform
+          working-directory: /juwans-portfolio/terraform
           run:  |
-            cd juwans-portfolio/terraform/
             rm -fr terraform.tfstate || echo 'Does not exist'
             terraform init -input=false
             terraform workspace new ${GITHUB_REF##*/} || echo 'Already exists'
