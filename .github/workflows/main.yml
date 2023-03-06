@@ -6,9 +6,9 @@ name: CI
 # Controls when the action will run
 on:
   push:
-#     branches: [main] 
+    branches: [main] 
   pull_request:
-#     branches: [main]
+    branches: [main]
   
 
 #The jobs that will run in sequence or parallel to this workflow being triggered/initiated
@@ -42,7 +42,8 @@ jobs:
               run:  |
                unset CI
                npm run build
-
+            
+            #Deploy terraform code to provision infrastructure
             - name: Deploy Terraform
               run:  |
                 rm -fr terraform.tfstate || echo 'Does not exist'
