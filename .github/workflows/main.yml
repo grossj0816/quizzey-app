@@ -29,6 +29,13 @@ jobs:
         #Checks out your repository
         - name: Git checkout
           uses: actions/checkout@v3
+
+        #Configure AWS credentials
+        - name: Configure AWS Credentials
+          uses: aws-actions/configure-aws-credentials@v1
+          with:
+            role-to-assume: arn:aws:iam::294652976462:user/terraform-user
+            aws-region: us-east-1
           
         #Install packages
         - name: Install packages
