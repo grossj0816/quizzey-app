@@ -1,0 +1,56 @@
+#name of the workflow that we are setting up
+name: CI
+    
+    
+    
+# Controls when the action will run
+on:
+  push:
+#     branches: [main] 
+  pull_request:
+#     branches: [main]
+  
+
+#The jobs that will run in sequence or parallel to this workflow being triggered/initiated
+jobs:
+     #The single job that we will be running is called "build"      
+     build:
+          #The type of runner that the job will run on
+          runs-on: unbuntu-latest
+          strategy:
+            matrix:
+             node-version: [18.14.2]
+
+          steps:
+            #Uses the specific node version provided abo           
+            - name: Use Node.js ${{ matrix.node-version }}
+              uses: actions/setup-node@v3
+              with:
+                node-version: ${{ matrix.node-version }}
+            
+            #Checks out your repository
+            - name: Git checkout
+              uses: actions/checkout@v3
+              
+            #Install packages
+            - name: Install packages
+              run: |
+                npm install
+              
+            #Build an optimized prod build               
+            - name: Production build
+              run:  |
+               unset CI
+               npm run build
+               
+            - name: Deploy to S3
+              uses: jakejarvis/s3-sync-action@master
+              with:
+                args: --acl public-read --delete
+              env:
+                AWS_S3_BUCKET: ${{ secrets.AWS_PRODUCTION_BUCKET_NAME }}
+                AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+                AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY}}
+                AWS_REGION: ${{ secrets.AWS_REGION }}
+                SOURCE_DIR: "build"           
+            
