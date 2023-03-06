@@ -17,7 +17,7 @@ jobs:
   build:
       name: 'S3 Web Hosting'
       #The type of runner that the job will run on
-      runs-on: unbuntu-latest
+      runs-on: ubuntu-latest
 
       steps:
         #Uses the specific node version provided abo           
