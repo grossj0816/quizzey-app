@@ -30,13 +30,6 @@ jobs:
         - name: Git checkout
           uses: actions/checkout@v3
 
-        #Configure AWS credentials
-        - name: Configure AWS Credentials
-          uses: aws-actions/configure-aws-credentials@v1
-          with:
-            role-to-assume: arn:aws:iam::294652976462:user/terraform-user
-            aws-region: us-east-1
-          
         #Install packages
         - name: Install packages
           working-directory: ./juwans-portfolio
@@ -67,7 +60,7 @@ jobs:
           with:
             args: --acl public-read --delete
           env:
-            AWS_S3_BUCKET: ${{ secrets.AWS_PRODUCTION_BUCKET_NAME }}
+            AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
             AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
             AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
             AWS_REGION: ${{ secrets.AWS_REGION }}
