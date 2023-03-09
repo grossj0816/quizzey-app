@@ -53,7 +53,7 @@ jobs:
 
         #Deploy terraform code to provision infrastructure
         - name: Deploy Terraform
-          working-directory:  ./terraform
+          working-directory:  ./juwans-portfolio/terraform
           run:  |
             rm -fr terraform.tfstate || echo 'Does not exist'
             terraform init -input=false 
