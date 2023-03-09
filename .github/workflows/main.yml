@@ -42,12 +42,20 @@ jobs:
           run:  |
             unset CI
             npm run build
-        
+
+        #Configure AWS Credentials 
+        - name: Configure AWS Credentials
+          uses: aws-actions/configure-aws-credentials@v2
+          with:
+           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+           aws-region: ${{ secrets.AWS_REGION }}
+
         #Deploy terraform code to provision infrastructure
         - name: Deploy Terraform
           working-directory:  ./juwans-portfolio/terraform
           run:  |
-            terraform init -input=false -backend-config="access_key=$AWS_ACCESS_KEY_ID" -backend-config="secret_key=$AWS_SECRET_ACCESS_KEY" -backend-config="region=secret_key=$AWS_REGION" 
+            terraform init -input=false 
             terraform workspace new ${GITHUB_REF##*/} || echo 'Already exists'
             terraform workspace select ${GITHUB_REF##*/} && terraform apply -input=false -auto-approve
           env:
@@ -55,6 +63,7 @@ jobs:
             AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
             AWS_REGION: ${{ secrets.AWS_REGION }}
             
+        #Deploy to S3
         - name: Deploy to S3
           uses: jakejarvis/s3-sync-action@master
           with:
