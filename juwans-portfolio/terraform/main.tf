@@ -33,8 +33,9 @@ resource "aws_s3_bucket_acl" "portfolio-hosting-bucket-acl" {
 
 resource "aws_s3_bucket_policy" "portfolio-bucket-policy" {
   bucket = aws_s3_bucket.portfolio-hosting-bucket.id
-  policy = jsonencode({
-    "Version": "2021-05-27",
+  policy = <<EOF
+{
+    "Version": "2012-10-17",
     "Statement": [
         {
             "Effect": "Allow",
@@ -43,7 +44,8 @@ resource "aws_s3_bucket_policy" "portfolio-bucket-policy" {
             "Resource": "arn:aws:s3:::juwans-portfolio-bucket/*"
         }
     ]
-  })
+}
+EOF
 }
 
 
