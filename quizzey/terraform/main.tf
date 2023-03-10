@@ -31,7 +31,7 @@ resource "aws_s3_bucket_acl" "quizzey-bucket-acl" {
   acl = "public-read"
 }
 
-resource "aws_s3_bucket_policy" "portfolio-bucket-policy" {
+resource "aws_s3_bucket_policy" "quizzey-bucket-policy" {
   bucket = aws_s3_bucket.quizzey-bucket.id
   policy = <<EOF
 {
