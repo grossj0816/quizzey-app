@@ -1,0 +1,27 @@
+#showcase{
+    background-image: url('../../../imgs/pexels-linkedin-sales-navigator-1251861.jpg');
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: start;
+    padding: 0 20px;
+}
+
+
+#lndg-pg-txt{
+    color:rgba(0, 24, 168, 1);
+    margin-top: 30vh;
+    text-align: center;
+    font-size: 42px;
+    font-style: italic;
+}
+
+#lndg-pg-btn{
+    text-align: center;
+}
+
+
