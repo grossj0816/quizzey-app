@@ -21,18 +21,18 @@ provider "aws" {
 }
 
 
-resource "aws_s3_bucket" "portfolio-hosting-bucket" {
+resource "aws_s3_bucket" "quizzey-bucket" {
   bucket = "quizzey-bucket"
   force_destroy = true
 }
 # https://docs.aws.amazon.com/AmazonS3/latest/userguide/acl-overview.html#canned-acl
-resource "aws_s3_bucket_acl" "portfolio-hosting-bucket-acl" {
-  bucket = aws_s3_bucket.portfolio-hosting-bucket.id
+resource "aws_s3_bucket_acl" "quizzey-bucket-acl" {
+  bucket = aws_s3_bucket.quizzey-bucket.id
   acl = "public-read"
 }
 
 resource "aws_s3_bucket_policy" "portfolio-bucket-policy" {
-  bucket = aws_s3_bucket.portfolio-hosting-bucket.id
+  bucket = aws_s3_bucket.quizzey-bucket.id
   policy = <<EOF
 {
     "Version": "2012-10-17",
@@ -49,8 +49,8 @@ EOF
 }
 
 
-resource "aws_s3_bucket_website_configuration" "portfolio-bucket-web-config" {
-  bucket = aws_s3_bucket.portfolio-hosting-bucket.id
+resource "aws_s3_bucket_website_configuration" "quizzey-bucket-web-config" {
+  bucket = aws_s3_bucket.quizzey-bucket.id
 
   index_document {
     suffix = "index.html"
