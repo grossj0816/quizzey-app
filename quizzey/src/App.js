@@ -12,7 +12,7 @@ const App = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path='/' element={!isAuthenticated ? <LandingPage /> : <Dashboard/>} />
+        <Route path='/index.html' element={!isAuthenticated ? <LandingPage /> : <Dashboard/>} />
       </Routes>
     </BrowserRouter>
   );
