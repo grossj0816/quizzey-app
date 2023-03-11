@@ -1,0 +1,30 @@
+#container{
+    margin-top: 15vh;
+}
+
+#alignDiv{
+    flex: 1;
+    display: flex;
+    align-items: center;
+}
+
+#coursesTitle{
+    font-size: 25px;
+    font-weight: 600;
+
+}
+
+
+
+#item{
+    /* width: 12%; */
+    font-weight: 500;
+    font-size: large;
+    /* padding-top: 1%; */
+}
+
+
+.rowSpacing{
+    margin-top: 5vh;
+}
+
