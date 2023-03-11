@@ -12,7 +12,7 @@ const App = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route exact path='/' element={!isAuthenticated ? <LandingPage /> : <Dashboard/>} />
+        <Route path='/' element={!isAuthenticated ? <LandingPage /> : <Dashboard/>} />
       </Routes>
     </BrowserRouter>
   );
