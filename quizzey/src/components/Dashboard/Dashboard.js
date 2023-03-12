@@ -5,14 +5,16 @@ import Col from 'react-bootstrap/Col';
 import "./css/Dashboard.css"
 import ReusableButton from "../common/reusableButton";
 import React from 'react';
-import { courseListHandler } from "../../services/jsonService";
+import { courseListHandler, quizzeySetHandler } from "../../services/jsonService";
 import ReusableCard from "../common/reusableCard";
 
 
 const Dashboard = () => {
 
-    const count = 2;
     const myCourses = courseListHandler();
+    const recentSets = quizzeySetHandler();
+
+    const count = myCourses.length;
 
 
     return ( 
@@ -34,11 +36,28 @@ const Dashboard = () => {
                 <Row className="rowSpacing">
                     {
                     myCourses.map((element, index) => {
+                        if(index < 2)
+                        {
+                            return(
+                                <Col xs={{span:10, offset:0}} sm={{span:6, offset:0}} md={{span:6, offset:0}} lg={{span:6, offset:0}}>
+                                    <ReusableCard title={element.name} subtitle={element.org} text={element.textbook} /> 
+                                </Col> 
+                            )
+                        }
+                    })
+                    }
+                </Row>
+                <Row className="rowSpacing">
+                    <p id="coursesTitle">Recently Opened:</p>
+                </Row>
+                <Row>
+                    {
+                    recentSets.map((element) => {
                         return(
                             <Col xs={{span:10, offset:0}} sm={{span:6, offset:0}} md={{span:6, offset:0}} lg={{span:6, offset:0}}>
-                                <ReusableCard title={element.name} subtitle={element.org} text={element.textbook} /> 
+                                <ReusableCard title={element.name} subtitle={element.count.toString()} text={element.userName} /> 
                             </Col> 
-                        )
+                        )    
                     })
                     }
                 </Row>

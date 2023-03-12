@@ -1,7 +1,7 @@
 import Card from 'react-bootstrap/Card';
 import { adjustTextWidth, adjustCardWidth } from '../../utils/utils';
 import { useEffect, useState } from 'react';
-
+import "./css/reusableCard.css";
 
 
 const ReusableCard = (props) => {
@@ -29,13 +29,13 @@ const ReusableCard = (props) => {
             key={variant}
             text={variant.toLowerCase() === 'light' ? 'dark' : 'white'}
             style={{width: adjustCardWidth(innerWidth)}}
-            className="mb-2"
+            className="mb-2 re-card"
         >
             <Card.Body>
                 <Card.Title>{adjustTextWidth(innerWidth, title)}</Card.Title>
-                <Card.Subtitle className="mb-2 text-muted">{adjustTextWidth(innerWidth, subtitle)}</Card.Subtitle>
+                <Card.Subtitle className="mb-2 text-muted">{subtitle}</Card.Subtitle>
                 <Card.Text>
-                    {adjustTextWidth(innerWidth, text)}
+                    {text}
                 </Card.Text>
             </Card.Body>
         </Card>

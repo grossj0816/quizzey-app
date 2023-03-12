@@ -13,9 +13,10 @@ export const adjustCardWidth = (w) => {
 
 
 // Adjusting the amount of text shown in cards due to screen views.
+// TODO: Add another clause for if the text is greater than 15 characters do text.slice()
 export const adjustTextWidth = (width, text) => {
     if (width >= 300 && width <= 640){
-        return text.slice(0,30) + "...";
+        return text.slice(0,25) + "...";
     }
     else if (width >= 641 && width <= 1007){ 
         return text.slice(0,25) + "..."; 
