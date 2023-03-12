@@ -8,11 +8,13 @@ import Dashboard from './components/Dashboard/Dashboard';
 const App = () => {
   
   const { isAuthenticated } = useAuth0();
+  const origin = window.location.origin;
+
 
   return (
     <BrowserRouter>
       <Routes>
-        <Route path='/index.html' element={!isAuthenticated ? <LandingPage /> : <Dashboard/>} />
+        <Route path={origin === "http://localhost:3000" ? '/' : '/index.html'} element={!isAuthenticated ? <LandingPage /> : <Dashboard />} />
       </Routes>
     </BrowserRouter>
   );

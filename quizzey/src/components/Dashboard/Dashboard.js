@@ -35,7 +35,7 @@ const Dashboard = () => {
                     {
                     myCourses.map((element, index) => {
                         return(
-                            <Col xs={{span:12, offset:0}} sm={{span:6, offset:0}} md={{span:6, offset:0}} lg={{span:6, offset:0}}>
+                            <Col xs={{span:10, offset:0}} sm={{span:6, offset:0}} md={{span:6, offset:0}} lg={{span:6, offset:0}}>
                                 <ReusableCard title={element.name} subtitle={element.org} text={element.textbook} /> 
                             </Col> 
                         )

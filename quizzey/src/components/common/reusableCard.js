@@ -1,5 +1,8 @@
 import Card from 'react-bootstrap/Card';
+import { adjustTextWidth, adjustCardWidth } from '../../utils/utils';
 import { useEffect, useState } from 'react';
+
+
 
 const ReusableCard = (props) => {
 
@@ -18,32 +21,7 @@ const ReusableCard = (props) => {
             window.removeEventListener('resize', handleWindowResize);
         };
     });
-    
 
-    const adjustCardWidth = (w) => {
-        if (w >= 300 && w <= 640){
-            return "22rem";
-        }
-        else if (w >= 641 && w <= 1007){ 
-            return "20rem"; 
-        }
-        else{
-            return "35rem";
-        }
-    }
-
-    const adjustTextWidth = (width, text) => {
-        if (width >= 300 && width <= 640){
-            return text.slice(0,30) + "...";
-        }
-        else if (width >= 641 && width <= 1007){ 
-            return text.slice(0,15) + "..."; 
-        }
-        else{
-            console.log(text)
-            return text;
-        }
-    }
     
     return ( 
         <Card
