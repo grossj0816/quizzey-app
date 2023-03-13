@@ -27,25 +27,36 @@ const Dashboard = (props) => {
         );
     }
 
-    const handleCourseLink = (id) => {
-        switch (origin) {
-            case "http://localhost:3000":
-                return `/courses/${id}`;
+    // const handleCourseLink = (id) => {
+    //     switch (origin) {
+    //         case "http://localhost:3000":
+    //             return `/courses/${id}`;
         
-            default:
-                return `/index.html/courses/:${id}`;
-        }
+    //         default:
+    //             return `/index.html/courses/${id}`;
+    //     }
+    // }
+
+    const handleCourseLink = (id) => {
+        return `/courses/${id}`;
     }
 
-    const handleSetLink = (id) => {
-        switch (origin) {
-            case "http://localhost:3000":
-                return `/quizzey-set/${id}`;
+
+    // const handleSetLink = (id) => {
+    //     switch (origin) {
+    //         case "http://localhost:3000":
+    //             return `/quizzey-set/${id}`;
         
-            default:
-                return `/index.html/quizzey-set/${id}`;
-        }
+    //         default:
+    //             return `/index.html/quizzey-set/${id}`;
+    //     }
+    // }
+
+
+    const handleSetLink = (id) => {
+        return `/quizzey-set/${id}`;
     }
+
 
     return ( 
         <>
