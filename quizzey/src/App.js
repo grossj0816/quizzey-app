@@ -1,7 +1,7 @@
 import LandingPage from './components/LandingPage/LandingPage';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useAuth0 } from '@auth0/auth0-react';
-import { HashRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Dashboard from './components/Dashboard/Dashboard';
 import MyCourse from './components/CoursePage/CoursePage';
 import QuizzeySet from './components/QuizzySetPage/QuizzeySetPage';
