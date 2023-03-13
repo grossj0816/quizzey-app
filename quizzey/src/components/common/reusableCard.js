@@ -3,6 +3,7 @@ import { adjustTextWidth, adjustCardWidth } from '../../utils/utils';
 import { useEffect, useState } from 'react';
 import "./css/reusableCard.css";
 import Badge from 'react-bootstrap/Badge';
+import { Link } from "react-router-dom";
 
 
 
@@ -58,12 +59,12 @@ const ReusableCard = (props) => {
                 }
                 {
                     courseLink &&
-                    <Card.Link href={courseLink}>View Course</Card.Link>
+                    <Link to={courseLink}>View Course</Link>
 
                 }
                 {
                     setLink &&
-                    <Card.Link href={setLink}>View Quizzy Set</Card.Link>
+                    <Link to={setLink}>View Quizzy Set</Link>
                 }
             </Card.Body>
         </Card>
