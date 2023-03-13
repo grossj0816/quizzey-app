@@ -17,8 +17,10 @@ const App = () => {
     <BrowserRouter>
       <Routes>
         <Route path={origin === "http://localhost:3000" ? '/' : '/index.html'} element={!isAuthenticated ? <LandingPage /> : <Dashboard origin={origin}/>} />
-        <Route path={origin === "http://localhost:3000" ? '/courses/:id' : '/index.html/courses/:id'} element={<MyCourse />} />
-        <Route path={origin === "http://localhost:3000" ? '/quizzey-set/:id' : '/index.html/quizzey-set/:id'} element={<QuizzeySet />} />
+        {/* <Route path={origin === "http://localhost:3000" ? '/courses/:id' : '/index.html/courses/:id'} element={<MyCourse />} /> */}
+        <Route path='/courses/:id' element={<MyCourse />} />
+        {/* <Route path={origin === "http://localhost:3000" ? '/quizzey-set/:id' : '/index.html/quizzey-set/:id'} element={<QuizzeySet />} /> */}
+        <Route path='/quizzey-set/:id' element={<QuizzeySet />} />
       </Routes>
     </BrowserRouter>
   );
