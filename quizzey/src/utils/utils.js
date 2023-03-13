@@ -22,7 +22,6 @@ export const adjustTextWidth = (width, text) => {
         return text.slice(0,25) + "..."; 
     }
     else{
-        console.log(text)
         return text;
     }
 }

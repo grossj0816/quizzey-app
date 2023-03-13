@@ -9,12 +9,13 @@ import { courseListHandler, quizzeySetHandler } from "../../services/jsonService
 import ReusableCard from "../common/reusableCard";
 
 
-const Dashboard = () => {
+const Dashboard = (props) => {
 
     const myCourses = courseListHandler();
     const recentSets = quizzeySetHandler();
 
     const count = myCourses.length;
+    const {origin} = props;
 
     const handleUserIcon = () => {
         return(
@@ -26,16 +27,25 @@ const Dashboard = () => {
         );
     }
 
-    
-    // const avatar = createAvatar(botttsNeutral, {
-    //     seed: "Elisa",
-    //     flip: false,
-    //     rotate: 0,
-    //     size: 48,
-    //     eyes: ["roundFrame02","robocop","eva"],
-    //     face: ["round01", "square01"],
-    //     dataUri: true
-    // });
+    const handleCourseLink = (id) => {
+        switch (origin) {
+            case "http://localhost:3000":
+                return `/courses/${id}`;
+        
+            default:
+                return `/index.html/courses/:${id}`;
+        }
+    }
+
+    const handleSetLink = (id) => {
+        switch (origin) {
+            case "http://localhost:3000":
+                return `/quizzey-set/${id}`;
+        
+            default:
+                return `/index.html/quizzey-set/${id}`;
+        }
+    }
 
     return ( 
         <>
@@ -60,9 +70,9 @@ const Dashboard = () => {
                         {
                             return(
                                 <Col xs={{span:10, offset:0}} sm={{span:6, offset:0}} md={{span:6, offset:0}} lg={{span:6, offset:0}}>
-                                    <ReusableCard title={element.name} subtitle={element.org} text={element.textbook} /> 
+                                    <ReusableCard title={element.name} subtitle={element.org} text={element.textbook} courseLink={handleCourseLink(element.courseId)}/> 
                                 </Col> 
-                            )
+                            );
                         }
                     })
                     }
@@ -75,7 +85,7 @@ const Dashboard = () => {
                     recentSets.map((element) => {
                         return(
                             <Col xs={{span:10, offset:0}} sm={{span:6, offset:0}} md={{span:6, offset:0}} lg={{span:6, offset:0}}>
-                                <ReusableCard title={element.name} badge={element.count.toString() + " Questions"} text={element.userName} image={handleUserIcon()}/> 
+                                <ReusableCard title={element.name} badge={element.count.toString() + " Questions"} text={element.userName} image={handleUserIcon()} setLink={handleSetLink(element.setId)}/> 
                             </Col> 
                         )    
                     })

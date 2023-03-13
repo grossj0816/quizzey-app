@@ -9,7 +9,7 @@ import Badge from 'react-bootstrap/Badge';
 
 const ReusableCard = (props) => {
 
-    const {title, subtitle, badge, text, image} = props;
+    const {title, subtitle, badge, text, image, courseLink, setLink} = props;
     const variant = "Light";
     const [innerWidth, setInnerWidth] = useState(window.innerWidth);
 
@@ -18,23 +18,11 @@ const ReusableCard = (props) => {
             setInnerWidth(window.innerWidth);
         };
         window.addEventListener('resize', handleWindowResize);
-        // console.log(innerWidth);
 
         return() => {
             window.removeEventListener('resize', handleWindowResize);
         };
     });
-
-    // const avatar = createAvatar(botttsNeutral, {
-    //     seed: "Elisa",
-    //     flip: false,
-    //     rotate: 0,
-    //     size: 48,
-    //     eyes: ["roundFrame02","robocop","eva"],
-    //     face: ["round01", "square01"],
-    //     dataUri: true
-    // });
-
 
     
     return ( 
@@ -62,12 +50,21 @@ const ReusableCard = (props) => {
                             {badge}
                         </Badge>
                     }
-                </Card.Subtitle>
+                    </Card.Subtitle>
 
                 }
-                <Card.Text id='cardText'>
-                    {image}{'   '}{text}
-                </Card.Text>
+                {
+                    image ? <Card.Text id='cardText'>{image}&nbsp;&nbsp;{text}</Card.Text> : <Card.Text id='cardText'>{text}</Card.Text>
+                }
+                {
+                    courseLink &&
+                    <Card.Link href={courseLink}>View Course</Card.Link>
+
+                }
+                {
+                    setLink &&
+                    <Card.Link href={setLink}>View Quizzy Set</Card.Link>
+                }
             </Card.Body>
         </Card>
      );
