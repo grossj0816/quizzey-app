@@ -16,6 +16,26 @@ const Dashboard = () => {
 
     const count = myCourses.length;
 
+    const handleUserIcon = () => {
+        return(
+            <img
+            src="https://api.dicebear.com/5.x/bottts-neutral/svg?seed=Felix&flip=true&rotate=0&size=30&eyes=roundFrame02,robocop,eva"
+            style={{borderRadius: "50%"}}
+            alt="avatar"
+            />
+        );
+    }
+
+    
+    // const avatar = createAvatar(botttsNeutral, {
+    //     seed: "Elisa",
+    //     flip: false,
+    //     rotate: 0,
+    //     size: 48,
+    //     eyes: ["roundFrame02","robocop","eva"],
+    //     face: ["round01", "square01"],
+    //     dataUri: true
+    // });
 
     return ( 
         <>
@@ -55,7 +75,7 @@ const Dashboard = () => {
                     recentSets.map((element) => {
                         return(
                             <Col xs={{span:10, offset:0}} sm={{span:6, offset:0}} md={{span:6, offset:0}} lg={{span:6, offset:0}}>
-                                <ReusableCard title={element.name} subtitle={element.count.toString()} text={element.userName} /> 
+                                <ReusableCard title={element.name} badge={element.count.toString() + " Questions"} text={element.userName} image={handleUserIcon()}/> 
                             </Col> 
                         )    
                     })

@@ -13,6 +13,8 @@ root.render(
   <Auth0Provider
     domain="dev-ha6q1jxc.us.auth0.com"
     clientId="4Ukqacu6IEFKEgv5R5xMbct8HoFA3p2Z"
+    useRefreshTokens={true}
+    cacheLocation="localstorage"
     authorizationParams={{
       redirect_uri: window.location.href
     }}
