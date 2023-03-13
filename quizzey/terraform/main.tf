@@ -59,4 +59,14 @@ resource "aws_s3_bucket_website_configuration" "quizzey-bucket-web-config" {
   error_document {
     key = "index.html"
   }
+  
+  routing_rule {
+    condition {
+      key_prefix_equals = "/courses/:id"
+    }
+
+    redirect {
+      replace_key_prefix_with = "#!"
+    }
+  }
 }
