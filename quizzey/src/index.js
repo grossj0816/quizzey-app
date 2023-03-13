@@ -18,7 +18,7 @@ root.render(
       redirect_uri: window.location.href
     }}
   >
-      <BrowserRouter basename='/index.html'>
+      <BrowserRouter>
         <App />
       </BrowserRouter>
   </Auth0Provider>
