@@ -60,13 +60,24 @@ resource "aws_s3_bucket_website_configuration" "quizzey-bucket-web-config" {
     key = "index.html"
   }
   
-  routing_rule {
-    condition {
-      key_prefix_equals = "/courses/:id"
+  routing_rules = <<EOF
+[{
+    "Condition": {
+      "KeyPrefixEquals": "/courses/:id"
+    },
+    "Redirect": {
+      "ReplaceKeyPrefixWith": "#!"
     }
-
-    redirect {
-      replace_key_prefix_with = "#!"
-    }
-  }
+},
+{
+    "Condition": {
+      "KeyPrefixEquals": "/quizzey-set/:id"
+    },
+    "Redirect": {
+      "ReplaceKeyPrefixWith": "#!"
+    }  
+}]
+EOF
 }
+
+
