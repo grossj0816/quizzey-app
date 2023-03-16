@@ -7,26 +7,14 @@ import ReusableButton from "../common/reusableButton";
 import React from 'react';
 import { courseListHandler, quizzeySetHandler } from "../../services/jsonService";
 import ReusableCard from "../common/reusableCard";
+import {handleUserIcon} from "../../utils/utils.js";
 
-
-const Dashboard = (props) => {
+const Dashboard = () => {
 
     const myCourses = courseListHandler();
     const recentSets = quizzeySetHandler();
 
     const count = myCourses.length;
-    const {origin} = props;
-
-    const handleUserIcon = () => {
-        return(
-            <img
-            src="https://api.dicebear.com/5.x/bottts-neutral/svg?seed=Felix&flip=true&rotate=0&size=30&eyes=roundFrame02,robocop,eva"
-            style={{borderRadius: "50%"}}
-            alt="avatar"
-            />
-        );
-    }
-
 
     
     const handleCourseLink = (id) => {
@@ -62,11 +50,13 @@ const Dashboard = (props) => {
                         if(index < 2)
                         {
                             return(
-                                <Col xs={{span:10, offset:0}} sm={{span:6, offset:0}} md={{span:6, offset:0}} lg={{span:6, offset:0}}>
+                                <Col key={element.courseId} xs={{span:10, offset:0}} sm={{span:6, offset:0}} md={{span:6, offset:0}} lg={{span:6, offset:0}}>
                                     <ReusableCard title={element.name} subtitle={element.org} text={element.textbook} courseLink={handleCourseLink(element.courseId)}/> 
                                 </Col> 
                             );
                         }
+
+                        return(<></>);
                     })
                     }
                 </Row>
@@ -77,7 +67,7 @@ const Dashboard = (props) => {
                     {
                     recentSets.map((element) => {
                         return(
-                            <Col xs={{span:10, offset:0}} sm={{span:6, offset:0}} md={{span:6, offset:0}} lg={{span:6, offset:0}}>
+                            <Col key={element.setId} xs={{span:10, offset:0}} sm={{span:6, offset:0}} md={{span:6, offset:0}} lg={{span:6, offset:0}}>
                                 <ReusableCard title={element.name} badge={element.count.toString() + " Questions"} text={element.userName} image={handleUserIcon()} setLink={handleSetLink(element.setId)}/> 
                             </Col> 
                         )    

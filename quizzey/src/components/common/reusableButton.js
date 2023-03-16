@@ -2,9 +2,9 @@ import Button from 'react-bootstrap/Button';
 
 const ReusableButton = (props) => {
 
-    const {name} = props;
+    const {name, size, event, disable} = props;
     return ( 
-        <Button size='sm'>{name}</Button>
+        <Button size={size} disabled={disable} onClick={() => event()}>{name}</Button>
 
      );
 }

@@ -7,7 +7,6 @@ import { Link } from "react-router-dom";
 
 
 
-
 const ReusableCard = (props) => {
 
     const {title, subtitle, badge, text, image, courseLink, setLink} = props;
@@ -59,12 +58,12 @@ const ReusableCard = (props) => {
                 }
                 {
                     courseLink &&
-                    <Link to={courseLink}>View Course</Link>
+                    <Link to={courseLink} className="boldLink">View Course</Link>
 
                 }
                 {
                     setLink &&
-                    <Link to={setLink}>View Quizzy Set</Link>
+                    <Link to={setLink} className="boldLink">View Quizzey Set</Link>
                 }
             </Card.Body>
         </Card>

@@ -13,13 +13,13 @@ export const adjustCardWidth = (w) => {
 
 
 // Adjusting the amount of text shown in cards due to screen views.
-// TODO: Add another clause for if the text is greater than 15 characters do text.slice()
 export const adjustTextWidth = (width, text) => {
     if (width >= 300 && width <= 640){
-        return text.slice(0,25) + "...";
+
+        return text.length >= 25 ? text.slice(0,25) + "..." : text
     }
     else if (width >= 641 && width <= 1007){ 
-        return text.slice(0,25) + "..."; 
+        return text.length >= 25 ? text.slice(0,25) + "..." : text; 
     }
     else{
         return text;
@@ -27,6 +27,7 @@ export const adjustTextWidth = (width, text) => {
 }
 
 
+// Adjust text size of text based on screen views.
 export const adjustTextSize = (width) => {
     if (width >= 300 && width <= 640){
         return "22px";
@@ -37,4 +38,16 @@ export const adjustTextSize = (width) => {
     else{
         return "42px";
     }
+}
+
+
+// handle random generation of creating a user icon.
+export const handleUserIcon = () => {
+    return(
+        <img
+        src="https://api.dicebear.com/5.x/bottts-neutral/svg?seed=Felix&flip=true&rotate=0&size=30&eyes=roundFrame02,robocop,eva"
+        style={{borderRadius: "50%"}}
+        alt="avatar"
+        />
+    );
 }

@@ -1,0 +1,28 @@
+#container{
+    margin-top: 15vh;
+}
+
+
+#coursetitle{
+    font-size: 25px;
+    font-weight: 600;
+    margin-bottom:  5px;
+
+}
+
+#setstitle{
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom:  5px;
+}
+
+
+#allSetsCard{
+    margin-left:1;
+    margin-right:1;
+}
+
+
+.rowSpacing{
+    margin-top: 2vh;
+}

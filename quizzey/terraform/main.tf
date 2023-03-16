@@ -66,7 +66,7 @@ resource "aws_s3_bucket_website_configuration" "quizzey-bucket-web-config" {
       "KeyPrefixEquals": "/courses/:id"
     },
     "Redirect": {
-      "ReplaceKeyPrefixWith": "#!"
+      "ReplaceKeyPrefixWith": ""
     }
 },
 {
@@ -74,7 +74,7 @@ resource "aws_s3_bucket_website_configuration" "quizzey-bucket-web-config" {
       "KeyPrefixEquals": "/quizzey-set/:id"
     },
     "Redirect": {
-      "ReplaceKeyPrefixWith": "#!"
+      "ReplaceKeyPrefixWith": ""
     }  
 }]
 EOF
