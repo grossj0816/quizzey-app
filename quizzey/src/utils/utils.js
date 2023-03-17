@@ -51,3 +51,30 @@ export const handleUserIcon = () => {
         />
     );
 }
+
+
+
+export const adjustFlashCardWidth = (w) => {
+    if (w >= 300 && w <= 640){
+        return "24rem";
+    }
+    else if (w >= 641 && w <= 1007){ 
+        return "43rem"; 
+    }
+    else{
+        return "81rem";
+    }
+}
+
+
+export const adjustFlashCardMargins = (w) => {
+    if (w >= 300 && w <= 640){
+        return "1vw";
+    }
+    else if (w >= 641 && w <= 1007){ 
+        return "0"; 
+    }
+    else{
+        return "0";
+    }
+}

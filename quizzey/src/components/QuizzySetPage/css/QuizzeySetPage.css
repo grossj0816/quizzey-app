@@ -9,21 +9,20 @@
     font-weight: 600;
 }
 
-#cardMargin{
-    margin-left: 13px;
-}
-
-#scardText{
-    text-align: center;
-    margin-top: 150px;
-    font-size: xx-large;
-}
-
-
 #cardRow{
     margin-right: 10px;
 }
 
+#navigateLink{
+    font-size: large;
+}
+
 .rowSpacing{
     margin-top: 8vh;
+}
+
+
+.flashcardText{
+    text-align: center;
+    margin-top: 150px;
 }

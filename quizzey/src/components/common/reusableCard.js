@@ -60,7 +60,7 @@ const ReusableCard = (props) => {
 
                 }
                 {
-                    image ? <Card.Text id='cardText'>{image}&nbsp;&nbsp;{text}</Card.Text> : <Card.Text id='cardText'>{text}</Card.Text>
+                    image ? <Card.Text id='re-cardText'>{image}&nbsp;&nbsp;{text}</Card.Text> : <Card.Text id='re-cardText'>{text}</Card.Text>
                 }
                 {
                     courseLink &&

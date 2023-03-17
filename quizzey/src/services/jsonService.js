@@ -77,7 +77,7 @@ export const listQuestionsHandler = () => {
             questionId: 2,
             setId: 1,
             question: "Cervical spondylosis is a degenerative change in the cervical spine that causes:",
-            answer: "Common causes of bradycardia include?"
+            answer: "narrowing of the spinal canal and pressure on the spinal cord"
         },
         {
             questionId: 3,

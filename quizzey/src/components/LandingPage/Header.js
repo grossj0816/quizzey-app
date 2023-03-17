@@ -9,7 +9,7 @@ const Header = () => {
         <>
         <Container>
             <Navbar bg="primary" variant="dark" fixed="top" collapseOnSelect expand="lg">
-                <Navbar.Brand href="#home" id='brandText'>Quizzey</Navbar.Brand>
+                <Navbar.Brand id='brandText'>Quizzey</Navbar.Brand>
                 <Nav className='me-auto'></Nav>
                 <LoginButton/>
             </Navbar>   
