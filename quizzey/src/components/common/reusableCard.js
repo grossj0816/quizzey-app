@@ -9,7 +9,13 @@ import { Link } from "react-router-dom";
 
 const ReusableCard = (props) => {
 
-    const {title, subtitle, badge, text, image, courseLink, setLink} = props;
+    const {title, 
+           subtitle,
+           badge, 
+           text, 
+           image, 
+           courseLink,
+           setLink} = props;
     const variant = "Light";
     const [innerWidth, setInnerWidth] = useState(window.innerWidth);
 
