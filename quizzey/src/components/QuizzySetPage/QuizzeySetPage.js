@@ -159,7 +159,7 @@ const QuizzeySet = () => {
                                     {/* FRONT SIDE */}
                                     <Card 
                                         className="flashcard" 
-                                        style={{ width: adjustFlashCardWidth(innerWidth), height: '50vh', marginLeft: adjustFlashCardMargins(innerWidth)}}
+                                        style={{ width: adjustFlashCardWidth(innerWidth), height: '50vh', marginLeft: adjustFlashCardMargins(innerWidth) }}
                                         bg={variant.toLowerCase()}
                                         key={variant}
                                         text={variant.toLowerCase() === 'light' ? 'dark' : 'white'}
@@ -177,7 +177,7 @@ const QuizzeySet = () => {
                                     {/* BACK SIDE */}
                                     <Card 
                                     className="flashcard" 
-                                    style={{ width: '81rem', height: '50vh' }}
+                                    style={{ width: adjustFlashCardWidth(innerWidth), height: '50vh', marginLeft: adjustFlashCardMargins(innerWidth) }}
                                     bg={variant.toLowerCase()}
                                     key={variant}
                                     text={variant.toLowerCase() === 'light' ? 'dark' : 'white'}
@@ -192,6 +192,7 @@ const QuizzeySet = () => {
                                 </ReactCardFlip>
                             );
                         }
+                        return(<></>);
                     })
                 }
             </Row>

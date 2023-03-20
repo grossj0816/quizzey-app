@@ -1,5 +1,5 @@
 import Card from 'react-bootstrap/Card';
-import { adjustTextWidth, adjustCardWidth } from '../../utils/utils';
+import { adjustTextWidth, adjustCardWidth, adjustFlashCardMargins } from '../../utils/utils';
 import { useEffect, useState } from 'react';
 import "./css/reusableCard.css";
 import Badge from 'react-bootstrap/Badge';
@@ -30,13 +30,12 @@ const ReusableCard = (props) => {
         };
     });
 
-    
     return ( 
         <Card
             bg={variant.toLowerCase()}
             key={variant}
             text={variant.toLowerCase() === 'light' ? 'dark' : 'white'}
-            style={{width: adjustCardWidth(innerWidth)}}
+            style={{width: adjustCardWidth(innerWidth), marginLeft: adjustFlashCardMargins(innerWidth)}}
             className="mb-2 re-card"
         >
             <Card.Body>
