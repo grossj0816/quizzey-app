@@ -1,7 +1,6 @@
-# portfolio-app
+# quizzey-app
 
-
-
+Quizzey is a "Quizlet-type" application I am currently building to aid as a study tool for my significant other. My first main goal for this project was to use Terraform code to provision & configure a public S3 Bucket where this React.js project lives. My second main goal was to create event triggered workflows in Github Actions that contains jobs for deploying our frontend app changes to S3 and destroying all of our S3 infrastructure in AWS. I am still currently working on the frontend react bits for this project.
 
 
 
