@@ -1,0 +1,43 @@
+# Name of workflow
+name: Destroy Quizzey
+
+
+
+
+# We will destroy our terraform resources on 
+on: [workflow_dispatch]
+
+jobs:
+    
+    destroy-frontend:
+       name: 'Destroy Quizzey Frontend'
+       runs-on: ubuntu-latest
+       
+       steps:
+        # Checks out repository
+         - name: Git checkout
+           uses: actions/checkout@v3
+         
+        # Configure aws account credentials so we can run terraform commands on aws.          
+         - name: Configure AWS Credentials
+           uses: aws-actions/configure-aws-credentials@v2
+           with:
+              aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+              aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+              aws-region: ${{ secrets.AWS_REGION }}
+          
+         # Destroy terraform resources           
+         - name: Destroy Terraform
+           working-directory: ./quizzey/terraform
+           run: |
+              rm -fr terraform.tf.state || echo 'Does not exist'
+              terraform init -input=false
+              terraform workspace new ${GITHUB_REF##*/} || echo 'Already exists'
+              terraform workspace select ${GITHUB_REF##*/} && terraform destroy -input=false -auto-approve
+           env:
+            AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+            AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+            AWS_REGION: ${{ secrets.AWS_REGION }}    
+
+           
+          
