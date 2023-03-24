@@ -13,6 +13,7 @@ import Form from 'react-bootstrap/Form';
 import ReusableButton from "../common/reusableButton";
 import ReusableCard from "../common/reusableCard";
 import {handleUserIcon} from "../../utils/utils.js";
+import { Link } from "react-router-dom";
 
 
 const MyCourse = () => {
@@ -67,7 +68,6 @@ const MyCourse = () => {
         return `/quizzey-set/${id}`;
     }
 
-
     return ( 
     <>
         <Header />
@@ -75,12 +75,15 @@ const MyCourse = () => {
             <Row>
                 <p id="coursetitle">{myCourse.name}</p>       
                 <h5>
-                    <Badge bg="primary">
+                    <Badge bg="secondary">
                     {myCourse.org}
                     </Badge>
                 </h5>
-                <hr />      
             </Row>
+            <Row>
+                <Link style={{margin: '5px'}} to={origin === "http://localhost:3000" ? '/' : '/index.html'} className="boldLink" id="navigateLink">View Dashboard</Link>
+            </Row>
+            <hr />      
             <Row >
                 <Col sm={{span: 6, offset: 0}} md={{span: 6, offset: 0}} lg={{span: 4, offset: 0}}>
                     <Form onChange={(e) => handleDropdownSelect(e)}>
@@ -97,7 +100,7 @@ const MyCourse = () => {
                             }
                             </Form.Select>
                         </Form.Group>
-                        <ReusableButton name="Clear"/>
+                        {/* <ReusableButton name="Clear" event={}/> */}
                     </Form>
                 </Col>
             </Row>

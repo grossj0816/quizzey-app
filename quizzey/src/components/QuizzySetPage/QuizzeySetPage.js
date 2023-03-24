@@ -3,7 +3,7 @@ import Col from "react-bootstrap/esm/Col";
 import Container from "react-bootstrap/esm/Container";
 import Row from "react-bootstrap/esm/Row";
 import { useParams } from "react-router-dom";
-import { listQuestionsHandler, quizzeySetHandler } from "../../services/jsonService";
+import { listQuestionsHandler, quizzeySetHandler, courseListHandler } from "../../services/jsonService";
 import ReusableButton from "../common/reusableButton";
 import Header from "../LandingPage/Header";
 import Card from 'react-bootstrap/Card';
@@ -11,13 +11,14 @@ import "./css/QuizzeySetPage.css";
 import { adjustFlashCardMargins, adjustFlashCardWidth, adjustTextSize } from "../../utils/utils";
 import ReactCardFlip from 'react-card-flip';
 import { Link } from "react-router-dom";
+import ProgressBar from 'react-bootstrap/ProgressBar';
 
 
 
 
 
 const QuizzeySet = () => {
-    let { id } = useParams();
+    let { id } = useParams(); //setID
     const origin = window.location.origin;
     const variant = "Light";
     const [innerWidth, setInnerWidth] = useState(window.innerWidth);
@@ -26,14 +27,13 @@ const QuizzeySet = () => {
     const [count, setCount] = useState(1); //the number count of what question we are currently on.
     const [total, setTotal] = useState();
     const [flipped, setFlipped] = useState(false);
-
+    const [progress, setProgress] = useState(0);
 
     useEffect(() => {
         const handleWindowResize = () => {
             setInnerWidth(window.innerWidth);
         };
         window.addEventListener('resize', handleWindowResize);
-        console.log(innerWidth);
 
         return() => {
             window.removeEventListener('resize', handleWindowResize);
@@ -66,8 +66,30 @@ const QuizzeySet = () => {
 
         //get total number of questions-----------------------------------------------------
         setTotal(questions.length);
+
+        // //set the initial progress bar value------------------------------------------------
+        // let initialProgress = (count / total) * 100;
+        // console.log("Progress", initialProgress);
+        // setProgress(Math.round(initialProgress));
       }
     },[id])
+
+
+    //trigger for updating the progress bar on 
+    useEffect(() => {
+        if (count !== total) 
+        {
+            let progress = (count / total) * 100;
+            console.log(progress);
+            setProgress(Math.round(progress));
+        } 
+        else 
+        {
+            console.log(100);
+            setProgress(100);
+        }
+    }, [count, total])
+    
 
     
     
@@ -78,6 +100,17 @@ const QuizzeySet = () => {
         //when we go to the next card, set the state 
         //of the card being flipped to false so we see the next question.
         setFlipped(false);
+
+    //     if (count !== total) 
+    //     {
+    //         let incrementProgress = (count / total) * 100;
+    //         console.log(incrementProgress);
+    //         // setProgress(100);
+    //     } 
+    //     else 
+    //     {
+    //         // setProgress(Math.round(incrementProgress));
+    //     }
     }
 
     const handleCountDecrement = () => {
@@ -113,8 +146,12 @@ const QuizzeySet = () => {
 
     //On button click we restart the flashcards by going back to the first one.
     const handleStartCountOver = () => {
+        let initialProgress = (count / total) * 100;
+
+
         setCount(1);
         setFlipped(false);
+        setProgress(Math.round(initialProgress));
     }
 
 
@@ -141,21 +178,27 @@ const QuizzeySet = () => {
                 <Col sm={{span:6, offset:0}} md={{span:3, offset:0}} lg={{span:4, offset:0}}>
                     <ReusableButton name="Start Over" event={handleStartCountOver}/>
                 </Col>
-                <Col sm={{span:6, offset:0}} md={{span:3, offset:0}} lg={{span:2, offset:0}}>
-                    <Link to={`/courses/${id}`} className="boldLink" id="navigateLink">View Course</Link>
-                </Col>
-                <Col sm={{span:6, offset:0}} md={{span:3, offset:0}} lg={{span:2, offset:0}}>
-                    <Link to={origin === "http://localhost:3000" ? '/' : '/index.html'} className="boldLink" id="navigateLink">View Dashboard</Link>
-                </Col>
+            </Row>
+            <Row>
+                {/* TODO: Put styling in css file */}
+                <div style={{display:'inline-block'}}>
+                    <Link style={{margin: '5px'}} to={`/courses/${id}`} className="boldLink" id="navigateLink">View Course</Link>
+                    <Link style={{margin: '5px'}} to={origin === "http://localhost:3000" ? '/' : '/index.html'} className="boldLink" id="navigateLink">View Dashboard</Link>
+                </div>
             </Row>
             <hr />
-            <Row className="rowSpacing" id="cardRow">
+            <ProgressBar style={{marginTop: '4vh', marginBottom: '3vh'}} 
+                         animated={count === total ? false : true} 
+                         now={progress} 
+                         variant={count === total ? 'success' : 'primary'} 
+                         striped={count === total ? false : true}/>
+            <Row id="cardRow">
                 {
                     questions.map((element, index) => {
                          
                         if ((index + 1) === count) {
                             return(
-                                <ReactCardFlip isFlipped={flipped} flipDirection="horizontal">
+                                <ReactCardFlip isFlipped={flipped} flipDirection="vertical">
                                     {/* FRONT SIDE */}
                                     <Card 
                                         className="flashcard" 
