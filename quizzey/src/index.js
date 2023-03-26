@@ -13,14 +13,14 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 
 root.render(
   <Auth0Provider
-    domain="dev-ha6q1jxc.us.auth0.com"
-    clientId="4Ukqacu6IEFKEgv5R5xMbct8HoFA3p2Z"
+    domain={process.env.REACT_APP_AUTH_DOMAIN}
+    clientId={process.env.REACT_APP_AUTH_CLIENTID}
     useRefreshTokens={true}
     cacheLocation="localstorage"
     authorizationParams={{
       redirect_uri: window.location.href,
-      audience: "https://dev-ha6q1jxc.us.auth0.com/api/v2/",
-      scope: "read:current_user update:current_user_metadata"
+      audience: process.env.REACT_APP_AUTH_AUDIENCE,
+      scope: process.env.REACT_APP_AUTH_SCOPE
     }}
   >
       <BrowserRouter>
