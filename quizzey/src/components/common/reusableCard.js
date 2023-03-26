@@ -15,7 +15,7 @@ const ReusableCard = (props) => {
            text, 
            image, 
            courseLink,
-           setLink} = props;
+           setLink,} = props;
     const variant = "Light";
     const [innerWidth, setInnerWidth] = useState(window.innerWidth);
 
@@ -51,7 +51,7 @@ const ReusableCard = (props) => {
                     <Card.Subtitle className="mb-2 text-muted">
                     {
                         badge &&
-                        <Badge bg="secondary" text="light">
+                        <Badge bg="secondary" text="light" pill>
                             {badge}
                         </Badge>
                     }

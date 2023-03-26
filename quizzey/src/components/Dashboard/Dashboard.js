@@ -12,20 +12,26 @@ import ReusableModal from "../common/reusableModal";
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Toast from 'react-bootstrap/Toast';
+import ListGroup from 'react-bootstrap/ListGroup';
+import { Link } from "react-router-dom";
 
 
 const Dashboard = () => {
 
     const variant = "Success";
-    const myCourses = courseListHandler();
+    let myCourses = courseListHandler();
     const recentSets = quizzeySetHandler();
-    const count = myCourses.length;
-    const [show, setShow] = useState(false);
-    const [showB, setShowB] = useState(false);
+    const [show, setShow] = useState(false); //show state for "Add Course Form" modal
+    const [showB, setShowB] = useState(false); //show state for success toast
+    const [showC, setShowC] = useState(false); //show state for "Courses list" modal
     const [name, setName] = useState("");
     const [org, setOrg] = useState("");
     const [textBook, setTextBook] = useState("");
+    const [courses, setCourses] = useState(myCourses);
+    const count = courses.length;
+
     
+
     
     const handleCourseLink = (id) => {
         return `/courses/${id}`;
@@ -36,14 +42,24 @@ const Dashboard = () => {
         return `/quizzey-set/${id}`;
     }
 
-
-    const showModal = () => {
+    // Show/hide course form event handlers -------------------------------- 
+    const showAddCourseForm = () => {
         setShow(true);
     }
 
-    const hideModal = () => {
+    const hideAddCourseForm = () => {
         setShow(false);
     }
+
+    // Show/hide course list event handlers ---------------------------------
+    const showCourseList = () => {
+        setShowC(true);
+    }
+
+    const hideCourseList = () => {
+        setShowC(false);
+    }
+
 
 
     const handleCourseSave = (e) => {
@@ -52,12 +68,21 @@ const Dashboard = () => {
         console.log(org);
         console.log(textBook);
         
-        hideModal();
+        hideAddCourseForm();
         setShowB(true);
         
+        // TODO: ADD MORE HERE WHEN WE DO SAVE COURSES 
     }
 
+    const handleCourseDelete = (e, courseId) => {
+        
+        //run the delete process
+        let filterResults = courses.filter((element) => element.courseId !== courseId);
+        setCourses(filterResults);
+    }
 
+    
+    //Rendering add new course modal
     const renderAddCourseForm = () => {
         return(
                 <Form>
@@ -78,8 +103,44 @@ const Dashboard = () => {
                     </Form.Group>
                     <Button type="submit" onClick={(e) => handleCourseSave(e)}>Submit</Button>
             </Form>
-        )
+        );
     }
+
+    // render course list modal
+    const renderCourseList = () => {
+        return(
+            <ListGroup as="ol" numbered>
+                {
+                    courses.map((element, index) => {
+                            return(
+                                    <ListGroup.Item
+                                    as="li"
+                                    className="d-flex justify-content-between align-items-start"
+                                    >
+                                        <div className="ms-2 me-auto listGroupText">
+                                        <div className="fw-bold">{element.name} </div>
+                                        {element.org}
+                                        </div>
+                                            <Button variant="link">                   
+                                             <Link to={handleCourseLink(element.courseId)} className="boldLink">Update</Link>
+                                            </Button>
+                                            &nbsp;&nbsp;
+                                            <Button variant="link">                   
+                                             <Link to={handleCourseLink(element.courseId)} className="boldLink">View</Link>
+                                            </Button>
+                                            &nbsp;&nbsp;
+                                            <ReusableButton name="Delete" variant="danger" event={event => handleCourseDelete(event, element.courseId)}/>
+                                    </ListGroup.Item>    
+                            );
+                    })
+                }
+            </ListGroup>
+        );
+    }
+
+
+
+
 
 
     return ( 
@@ -108,18 +169,26 @@ const Dashboard = () => {
                     <Col sm={{span:6, offset:0}} md={{span:3, offset:0}} lg={{span:1, offset:0}}>
                         <p id="item">Courses listed: {count}</p>
                     </Col>
-                    <Col sm={{span:6, offset:0}} md={{span:3, offset:0}} lg={{span:1, offset:0}}>
-                        <ReusableButton name="Add Course"  event={showModal} />
+                    <Col sm={{span:3, offset:0}} md={{span:3, offset:0}} lg={{span:1, offset:0}}>
+                        <ReusableButton name="Add Course"  event={showAddCourseForm} />
+                    </Col>
+                    <Col sm={{span:3, offset:0}} md={{span:3, offset:0}} lg={{span:1, offset:0}}>
+                        <ReusableButton name="View All Courses" variant="secondary"  event={showCourseList} />
                     </Col>
                     <ReusableModal show={show} 
-                                   hide={hideModal} 
+                                   hide={hideAddCourseForm} 
                                    title={"Add New Course:"}
                                    body={renderAddCourseForm}/>
+                                   
+                    <ReusableModal show={showC} 
+                                   hide={hideCourseList} 
+                                   title={"Course List:"}
+                                   body={renderCourseList}/>                    
                 </Row>
                 <hr />
                 <Row className="rowSpacing">
                     {
-                    myCourses.map((element, index) => {
+                     courses.map((element, index) => {
                         if(index < 2)
                         {
                             return(

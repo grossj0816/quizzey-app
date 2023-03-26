@@ -3,7 +3,7 @@ import Col from "react-bootstrap/esm/Col";
 import Container from "react-bootstrap/esm/Container";
 import Row from "react-bootstrap/esm/Row";
 import { useParams } from "react-router-dom";
-import { listQuestionsHandler, quizzeySetHandler, courseListHandler } from "../../services/jsonService";
+import { listQuestionsHandler, quizzeySetHandler } from "../../services/jsonService";
 import ReusableButton from "../common/reusableButton";
 import Header from "../LandingPage/Header";
 import Card from 'react-bootstrap/Card';

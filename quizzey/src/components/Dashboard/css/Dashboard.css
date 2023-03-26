@@ -23,8 +23,16 @@
     /* padding-top: 1%; */
 }
 
+#popOverText{
+    font-size: large;
+    font-weight: 700;
+}
 
 .rowSpacing{
     margin-top: 5vh;
+}
+
+.listGroupText{
+    font-size: large;
 }
 

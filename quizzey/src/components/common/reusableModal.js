@@ -1,6 +1,8 @@
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
+// import { useEffect, useState } from 'react';
+// import { adjustTextSize } from '../../utils/utils';
+
 
 
 const ReusableModal = (props) => {
@@ -8,6 +10,19 @@ const ReusableModal = (props) => {
            hide, 
            title,
            body} = props;
+
+    // const [innerWidth, setInnerWidth] = useState(window.innerWidth);
+
+    // useEffect(() => {
+    //     const handleWindowResize = () => {
+    //         setInnerWidth(window.innerWidth);
+    //     };
+    //     window.addEventListener('resize', handleWindowResize);
+
+    //     return() => {
+    //         window.removeEventListener('resize', handleWindowResize);
+    //     };
+    // });
 
     return ( 
         <Modal
@@ -23,7 +38,9 @@ const ReusableModal = (props) => {
                     {title}
                 </Modal.Title>
             </Modal.Header>
-            <Modal.Body>
+            <Modal.Body 
+            // style={{fontSize: adjustTextSize(innerWidth)}} 
+            >
                 {body()}
             </Modal.Body>
             <Modal.Footer>

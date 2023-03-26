@@ -10,7 +10,6 @@ import Badge from 'react-bootstrap/Badge';
 // import Card from 'react-bootstrap/Card';
 // import Nav from 'react-bootstrap/Nav';
 import Form from 'react-bootstrap/Form';
-import ReusableButton from "../common/reusableButton";
 import ReusableCard from "../common/reusableCard";
 import {handleUserIcon} from "../../utils/utils.js";
 import { Link } from "react-router-dom";
@@ -75,7 +74,7 @@ const MyCourse = () => {
             <Row>
                 <p id="coursetitle">{myCourse.name}</p>       
                 <h5>
-                    <Badge bg="secondary">
+                    <Badge bg="secondary" pill>
                     {myCourse.org}
                     </Badge>
                 </h5>

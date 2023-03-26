@@ -5,29 +5,36 @@ import { Route, Routes } from "react-router-dom";
 import Dashboard from './components/Dashboard/Dashboard';
 import MyCourse from './components/CoursePage/CoursePage';
 import QuizzeySet from './components/QuizzySetPage/QuizzeySetPage';
-// import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 
 const App = () => {
   
-  const { isAuthenticated, getAccessTokenSilently, getIdTokenClaims } = useAuth0();
+  const { isAuthenticated, getAccessTokenSilently} = useAuth0();
   const origin = window.location.origin;
+  const [myToken, setMyToken] = useState("");
 
-  // useEffect(() => {
-  //   const  getAccessToken = async () => {
-  //     try {
-  //       const token = await getAccessTokenSilently({
-  //         authorizationParams: {
-  //           audience: "https://dev-ha6q1jxc.us.auth0.com/api/v2/",
-  //           scope: "read:current_user",
-  //         }
-  //       });
-  //     console.log(token);
-  //     } catch (error) {
+  //TODO: Store token in redux at some point so we can use the token all around the app.
+  //TODO: Also, see if I can run that function out of useEffect. 
+  useEffect(() => {
+    const  getAccessToken = async () => {
+      try {
+        const token = await getAccessTokenSilently({
+          authorizationParams: {
+            audience: "https://dev-ha6q1jxc.us.auth0.com/api/v2/",
+            scope: "read:current_user",
+          }
+        });
+        setMyToken(token);
+      } 
+      catch (error) 
+      {
         
-  //     }
-  //   }
-  // }, [])
+      }
+       
+    }
+    getAccessToken();
+  }, [])
   
 
 
