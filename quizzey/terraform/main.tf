@@ -25,6 +25,7 @@ resource "aws_s3_bucket" "quizzey-bucket" {
   bucket = "quizzey-bucket"
   force_destroy = true
 }
+
 # https://docs.aws.amazon.com/AmazonS3/latest/userguide/acl-overview.html#canned-acl
 resource "aws_s3_bucket_acl" "quizzey-bucket-acl" {
   bucket = aws_s3_bucket.quizzey-bucket.id
