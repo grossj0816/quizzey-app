@@ -14,6 +14,7 @@ const App = () => {
   const origin = window.location.origin;
   const [myToken, setMyToken] = useState("");
 
+  
   //TODO: Store token in redux at some point so we can use the token all around the app.
   //TODO: Also, see if I can run that function out of useEffect. 
   useEffect(() => {
