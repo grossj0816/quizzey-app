@@ -58,24 +58,6 @@ resource "aws_s3_bucket_acl" "quizzey-bucket-acl" {
 }
 
 
-# resource "aws_s3_bucket_policy" "quizzey-bucket-policy" {
-#   bucket = aws_s3_bucket.quizzey-bucket.id
-#   policy = <<EOF
-# {
-#     "Version": "2012-10-17",
-#     "Statement": [
-#         {
-#             "Effect": "Allow",
-#             "Principal": "*",
-#             "Action": "s3:GetObject",
-#             "Resource": "arn:aws:s3:::quizzey-bucket/*"
-#         }
-#     ]
-# }
-# EOF
-# }
-
-
 resource "aws_s3_bucket_website_configuration" "quizzey-bucket-web-config" {
   bucket = aws_s3_bucket.quizzey-bucket.id
 
