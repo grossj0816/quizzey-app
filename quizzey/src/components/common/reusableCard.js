@@ -15,7 +15,7 @@ const ReusableCard = (props) => {
            text, 
            image, 
            courseLink,
-           setLink,} = props;
+           setLink} = props;
     const variant = "Light";
     const [innerWidth, setInnerWidth] = useState(window.innerWidth);
 

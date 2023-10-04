@@ -14,6 +14,7 @@ import Button from 'react-bootstrap/Button';
 import Toast from 'react-bootstrap/Toast';
 import ListGroup from 'react-bootstrap/ListGroup';
 import { Link } from "react-router-dom";
+import Swal from 'sweetalert2'
 
 
 const Dashboard = () => {
@@ -33,7 +34,7 @@ const Dashboard = () => {
     
 
     
-    const handleCourseLink = (id) => {
+    const handleOpenCourseLink = (id) => {
         return `/courses/${id}`;
     }
 
@@ -122,14 +123,28 @@ const Dashboard = () => {
                                         {element.org}
                                         </div>
                                             <Button variant="link">                   
-                                             <Link to={handleCourseLink(element.courseId)} className="boldLink">Update</Link>
+                                             <Link to={handleOpenCourseLink(element.courseId)} className="boldLink">Update</Link>
                                             </Button>
                                             &nbsp;&nbsp;
                                             <Button variant="link">                   
-                                             <Link to={handleCourseLink(element.courseId)} className="boldLink">View</Link>
+                                             <Link to={handleOpenCourseLink(element.courseId)} className="boldLink">View</Link>
                                             </Button>
                                             &nbsp;&nbsp;
-                                            <ReusableButton name="Delete" variant="danger" event={event => handleCourseDelete(event, element.courseId)}/>
+                                            <ReusableButton name="Delete" variant="danger" event={event => Swal.fire({
+                                                title: 'Deleting Course',
+                                                text:  'Are you sure you want to continue?',
+                                                icon: 'warning',
+                                                showCancelButton: true,
+                                                showConfirmButton: true,
+                                                confirmButtonColor: 'red',
+                                                confirmButtonText: 'OK',
+                                                cancelButtonColor: 'blue',
+                                                cancelButtonText: 'CANCEL'
+                                            }).then((result) => {
+                                                result.isConfirmed && handleCourseDelete(event, element.courseId);
+                                            })
+                                            
+                                            }/>
                                     </ListGroup.Item>    
                             );
                     })
@@ -170,10 +185,10 @@ const Dashboard = () => {
                         <p id="item">Courses listed: {count}</p>
                     </Col>
                     <Col sm={{span:3, offset:0}} md={{span:3, offset:0}} lg={{span:1, offset:0}}>
-                        <ReusableButton name="Add Course"  event={showAddCourseForm} />
+                        <ReusableButton name="View All Courses" variant="secondary"  event={showCourseList} />
                     </Col>
                     <Col sm={{span:3, offset:0}} md={{span:3, offset:0}} lg={{span:1, offset:0}}>
-                        <ReusableButton name="View All Courses" variant="secondary"  event={showCourseList} />
+                        <ReusableButton name="Add Course"  event={showAddCourseForm} />
                     </Col>
                     <ReusableModal show={show} 
                                    hide={hideAddCourseForm} 
@@ -196,7 +211,7 @@ const Dashboard = () => {
                                     <ReusableCard title={element.name} 
                                                   subtitle={element.org} 
                                                   text={element.textbook} 
-                                                  courseLink={handleCourseLink(element.courseId)} /> 
+                                                  courseLink={handleOpenCourseLink(element.courseId)}/> 
                                 </Col> 
                             );
                         }

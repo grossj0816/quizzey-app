@@ -15,7 +15,17 @@
 
 .boldLink{
   font-weight: 500;
+  margin-right: 10px;
 }
+
+.deleteLink {
+  color: red;
+}
+
+.deleteLink:hover {
+  color: darkred;
+}
+
 
 #re-cardText{
   font-weight: 500;

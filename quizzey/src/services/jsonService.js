@@ -4,25 +4,29 @@ export const courseListHandler = () => {
             courseId: 1,
             name: "Human Anatomy & Physiology",
             org: "SUNY Cobleskill",
-            textbook: "Human Anatomy & Physiology Version 1"
+            textbook: "Human Anatomy & Physiology Version 1",
+            active: true
         },
         {
             courseId: 2,
             name: "Paramedic Field Clinical",
             org: "SUNY Cobleskill",
-            textbook: "Paramedic Field Clinical Version 1"
+            textbook: "Paramedic Field Clinical Version 1",
+            active: true
         },
         {
             courseId: 3,
             name: "Paramedic Hospital Clinical",
             org: "SUNY Cobleskill",
-            textbook: "Paramedic Hospital Clinical Version 1"
+            textbook: "Paramedic Hospital Clinical Version 1", 
+            active: true
         },
         {
             courseId: 4,
             name: "Paramedic Lab ",
             org: "SUNY Cobleskill",
-            textbook: "Paramedic Lab Version 1"
+            textbook: "Paramedic Lab Version 1",
+            active: true
         }
     ];
 
