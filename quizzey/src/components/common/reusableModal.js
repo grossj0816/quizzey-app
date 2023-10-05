@@ -41,6 +41,7 @@ const ReusableModal = (props) => {
             <Modal.Body 
             // style={{fontSize: adjustTextSize(innerWidth)}} 
             >
+                a
                 {body()}
             </Modal.Body>
             <Modal.Footer>
