@@ -14,8 +14,7 @@ import Button from 'react-bootstrap/Button';
 import Toast from 'react-bootstrap/Toast';
 import ListGroup from 'react-bootstrap/ListGroup';
 import { Link } from "react-router-dom";
-import Swal from 'sweetalert2'
-
+import Swal from 'sweetalert2';
 
 const Dashboard = () => {
 
