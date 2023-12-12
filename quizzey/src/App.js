@@ -10,7 +10,7 @@ import { useEffect, useState } from 'react';
 
 const App = () => {
   
-  const { isAuthenticated, getAccessTokenSilently} = useAuth0();
+  const { user, isAuthenticated, getAccessTokenSilently} = useAuth0();
   const origin = window.location.origin;
   const [myToken, setMyToken] = useState("");
 
@@ -23,7 +23,7 @@ const App = () => {
         const token = await getAccessTokenSilently({
           authorizationParams: {
             audience: "https://dev-ha6q1jxc.us.auth0.com/api/v2/",
-            scope: "read:current_user",
+            scope: "read:current_user openid profile email",
           }
         });
         setMyToken(token);
@@ -37,8 +37,6 @@ const App = () => {
     getAccessToken();
   }, [])
   
-
-
   return (
       <Routes>
         <Route path={origin === "http://localhost:3000" ? '/' : '/index.html'} element={!isAuthenticated ? <LandingPage /> : <Dashboard />} />
