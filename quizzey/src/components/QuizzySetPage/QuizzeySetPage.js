@@ -64,6 +64,8 @@ const QuizzeySet = () => {
         set = sets.find((set) => set.setId === +id);
         setQuizzeySet(set);
 
+        // TODO: Set up this in the dashboard at some point.
+        handleRecentSets(set);
         //get total number of questions-----------------------------------------------------
         setTotal(questions.length);
 
@@ -167,6 +169,11 @@ const QuizzeySet = () => {
     }
 
 
+    const handleRecentSets = (set) =>  {
+        localStorage.setItem('recent-opened-sets', JSON.stringify(set));
+    }
+
+
     return ( 
     <>
         <Header />
@@ -182,7 +189,6 @@ const QuizzeySet = () => {
             <Row>
                 {/* TODO: Put styling in css file */}
                 <div style={{display:'inline-block'}}>
-                    <Link style={{margin: '5px'}} to={`/courses/${id}`} className="boldLink" id="navigateLink">View Course</Link>
                     <Link style={{margin: '5px'}} to={origin === "http://localhost:3000" ? '/' : '/index.html'} className="boldLink" id="navigateLink">View Dashboard</Link>
                 </div>
             </Row>

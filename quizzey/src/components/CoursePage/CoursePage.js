@@ -17,7 +17,7 @@ import { Link } from "react-router-dom";
 
 const MyCourse = () => {
 
-    let { id } = useParams();
+    let { id } = useParams(); //courseId
     const myCourses = courseListHandler();
     const [myCourse, setMyCourse] = useState({});
     const [quizzeySets, setQuizzeySets] = useState([]);
@@ -108,7 +108,7 @@ const MyCourse = () => {
                     quizzeySets.map((element, index) => {
                         return(
                             <Col xs={{span:10, offset:0}} sm={{span:6, offset:0}} md={{span:6, offset:0}} lg={{span:6, offset:0}}>
-                                <ReusableCard title={element.name} badge={element.count.toString() + " Questions"} text={element.userName} image={handleUserIcon()} setLink={handleSetLink(element.setId)}/> 
+                                <ReusableCard title={element.name} text={element.userName} image={handleUserIcon()} setLink={handleSetLink(element.setId)}/> 
                             </Col>                             
                         )
                     })
