@@ -39,37 +39,39 @@ const ReusableCard = (props) => {
             className="mb-2 re-card"
         >
             <Card.Body>
-                <Card.Title>{adjustTextWidth(innerWidth, title)}</Card.Title>
-                {
-                    subtitle &&
-                    <Card.Subtitle className="mb-2 text-muted">
-                        {subtitle}
-                    </Card.Subtitle>
-                }
-                {
-                    badge &&
-                    <Card.Subtitle className="mb-2 text-muted">
+                <center>
+                    <Card.Title>{adjustTextWidth(innerWidth, title)}</Card.Title>
+                    {
+                        subtitle &&
+                        <Card.Subtitle className="mb-2 text-muted">
+                            {subtitle}
+                        </Card.Subtitle>
+                    }
                     {
                         badge &&
-                        <Badge bg="secondary" text="light" pill>
-                            {badge}
-                        </Badge>
+                        <Card.Subtitle className="mb-2 text-muted">
+                        {
+                            badge &&
+                            <Badge bg="secondary" text="light" pill>
+                                {badge}
+                            </Badge>
+                        }
+                        </Card.Subtitle>
+
                     }
-                    </Card.Subtitle>
+                    {
+                        image ? <Card.Text id='re-cardText'>{image}&nbsp;&nbsp;{text}</Card.Text> : <Card.Text id='re-cardText'>{text}</Card.Text>
+                    }
+                    {
+                        courseLink &&
+                        <Link to={courseLink} className="boldLink">View Course</Link>
 
-                }
-                {
-                    image ? <Card.Text id='re-cardText'>{image}&nbsp;&nbsp;{text}</Card.Text> : <Card.Text id='re-cardText'>{text}</Card.Text>
-                }
-                {
-                    courseLink &&
-                    <Link to={courseLink} className="boldLink">View Course</Link>
-
-                }
-                {
-                    setLink &&
-                    <Link to={setLink} className="boldLink">View Quizzey Set</Link>
-                }
+                    }
+                    {
+                        setLink &&
+                        <Link to={setLink} className="boldLink">View Quizzey Set</Link>
+                    }
+                </center>
             </Card.Body>
         </Card>
      );

@@ -6,37 +6,41 @@ import Dashboard from './components/Dashboard/Dashboard';
 import MyCourse from './components/CoursePage/CoursePage';
 import QuizzeySet from './components/QuizzySetPage/QuizzeySetPage';
 import { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { getUserInformation } from './redux/actions/userInfoActions';
+
 
 
 const App = () => {
   
-  const { user, isAuthenticated, getAccessTokenSilently} = useAuth0();
+  const {isAuthenticated, getAccessTokenSilently} = useAuth0();
   const origin = window.location.origin;
-  const [myToken, setMyToken] = useState("");
-
+  const dispatch = useDispatch();
   
   //TODO: Store token in redux at some point so we can use the token all around the app.
-  //TODO: Also, see if I can run that function out of useEffect. 
   useEffect(() => {
-    const  getAccessToken = async () => {
+    localStorage.setItem('recent_opened_sets', []);
+    const getAccessToken = async () => {
       try {
         const token = await getAccessTokenSilently({
           authorizationParams: {
             audience: "https://dev-ha6q1jxc.us.auth0.com/api/v2/",
-            scope: "read:current_user openid profile email",
+            scope: "read:current_user",
           }
         });
-        setMyToken(token);
+        return token;
       } 
       catch (error) 
       {
-        
+        console.log(error);
       }
        
     }
-    getAccessToken();
+    getAccessToken().then(token => {
+      dispatch(getUserInformation(token))
+    });
   }, [])
-  
+
   return (
       <Routes>
         <Route path={origin === "http://localhost:3000" ? '/' : '/index.html'} element={!isAuthenticated ? <LandingPage /> : <Dashboard />} />

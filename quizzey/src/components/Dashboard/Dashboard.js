@@ -20,7 +20,7 @@ const Dashboard = () => {
 
     const variant = "Success";
     let myCourses = courseListHandler();
-    const recentSets = quizzeySetHandler();
+    let recentSets = JSON.parse(localStorage.getItem('recent_opened_sets'));
     const [show, setShow] = useState(false); //show state for "Add Course Form" modal
     const [showB, setShowB] = useState(false); //show state for success toast
     const [showC, setShowC] = useState(false); //show state for "Courses list" modal
@@ -30,7 +30,7 @@ const Dashboard = () => {
     const [courses, setCourses] = useState(myCourses);
     const count = courses.length;
 
-    
+    console.log(recentSets)
 
     
     const handleOpenCourseLink = (id) => {
@@ -220,19 +220,20 @@ const Dashboard = () => {
                     }
                 </Row>
                 <Row className="rowSpacing">
-                    <p id="coursesTitle">Recently Opened:</p>
+                    <p id="coursesTitle">Recently opened:</p>
                 </Row>
                 <Row>
                     {
-                    recentSets.map((element) => {
-                        return(
-                            <Col key={element.setId} xs={{span:10, offset:0}} sm={{span:6, offset:0}} md={{span:6, offset:0}} lg={{span:6, offset:0}}>
-                                <ReusableCard title={element.name} 
-                                              badge={element.count.toString() + " Questions"} 
-                                              text={element.userName} image={handleUserIcon()} 
-                                              setLink={handleSetLink(element.setId)}/> 
-                            </Col> 
-                        )    
+                    recentSets.map((element, index) => {
+                        if (index < 4) {
+                            return(
+                                <Col key={element.setId} xs={{span:10, offset:0}} sm={{span:6, offset:0}} md={{span:6, offset:0}} lg={{span:6, offset:0}}>
+                                    <ReusableCard title={element.name} 
+                                                  text={element.userName} image={handleUserIcon()} 
+                                                  setLink={handleSetLink(element.setId)}/> 
+                                </Col> 
+                            )  
+                        } 
                     })
                     }
                 </Row>

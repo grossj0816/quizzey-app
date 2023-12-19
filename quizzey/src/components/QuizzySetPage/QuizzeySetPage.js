@@ -170,7 +170,38 @@ const QuizzeySet = () => {
 
 
     const handleRecentSets = (set) =>  {
-        localStorage.setItem('recent-opened-sets', JSON.stringify(set));
+        let openedSetList = [];
+        // let setObj = JSON.parse(set); TODO: use this for when I am using JSON data from api.
+        let setObj = set;
+
+        // if we have nothing in 'recent_opened_sets'
+        if (localStorage.getItem('recent_opened_sets').length === 0) {
+            console.log('We have nothing in session...');
+            
+            // add the set obj to the list
+            openedSetList.unshift(setObj);
+
+            // set session
+            localStorage.setItem('recent_opened_sets', JSON.stringify(openedSetList));
+        }
+        else //TODO: Work on this next...
+        {
+            console.log('We have recent sets in session...')
+            //store the current list in local storage to openedSetList.
+            openedSetList = JSON.parse(localStorage.getItem('recent_opened_sets'));
+
+            let isDupSet = openedSetList.filter((obj) => obj.setId === setObj.setId).length > 0 ? true : false;
+
+            console.log('Duplicate set: ', isDupSet);
+
+            if (!isDupSet) {
+                //move the recent set up to the top of the list.
+                openedSetList.unshift(setObj);
+
+                // update session
+                localStorage.setItem('recent_opened_sets', JSON.stringify(openedSetList))
+            }
+        }
     }
 
 
