@@ -105,10 +105,7 @@ const Dashboard = () => {
                     </Form.Group>
                     <Form.Group className="mb-3">
                         <Form.Label>Organization:</Form.Label>
-                        <Form.Select onChange={(e) => setOrg(e.target.value)}>
-                        <option value={''}></option>
-                        <option value={'SUNY Cobleskill'}>SUNY Cobleskill</option>
-                        </Form.Select>
+                        <Form.Control placeholder="Organization" onChange={(e) => setOrg(e.target.value)} />
                     </Form.Group>
                     <Form.Group className="mb-3">
                         <Form.Label>Textbook:</Form.Label>
@@ -139,7 +136,7 @@ const Dashboard = () => {
                                              <Link to={handleOpenCourseLink(element.courseId)} className="boldLink">View</Link>
                                             </Button>
                                             &nbsp;&nbsp;
-                                            <ReusableButton name="Delete" variant="danger" event={event => Swal.fire({
+                                            {/* <ReusableButton name="Delete" variant="danger" event={event => Swal.fire({
                                                 title: 'Deleting Course',
                                                 text:  'Are you sure you want to continue?',
                                                 icon: 'warning',
@@ -153,7 +150,7 @@ const Dashboard = () => {
                                                 result.isConfirmed && handleCourseDelete(event, element.courseId);
                                             })
                                             
-                                            }/>
+                                            }/> */}
                                     </ListGroup.Item>    
                             );
                     })

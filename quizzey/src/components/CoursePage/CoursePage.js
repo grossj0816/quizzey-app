@@ -27,6 +27,7 @@ const MyCourse = () => {
     const [name, setName] = useState("");
     const [org, setOrg] = useState("");
     const [textbook, setTextBook] = useState("");
+    const [active, setActive] = useState(false);
     const [updateScreen, setUpdateScreen] = useState(false);
 
     // TODO: CLEAN UP THE CODE HERE
@@ -43,6 +44,7 @@ const MyCourse = () => {
             setName(course.name);
             setOrg(course.org);
             setTextBook(course.textbook);
+            setActive(course.active);
 
             sets = sets.filter((element) => element.courseId === +id);
             setDdValues(sets);
@@ -86,7 +88,7 @@ const MyCourse = () => {
     } 
 
     //Rendering add new course modal
-    const renderAddCourseForm = () => {
+    const renderUpdateCourseForm = () => {
         return(
                 <Form>
                     <Form.Group className="mb-3">
@@ -96,12 +98,10 @@ const MyCourse = () => {
                                       value={name} />
                     </Form.Group>
                     <Form.Group className="mb-3">
-                        {/* TODO: Make this a textbook instead of a select!!! */}
                         <Form.Label>Organization:</Form.Label>
-                        <Form.Select value={org} onChange={(e) => setOrg(e.target.value)}>
-                        <option value={''}></option>
-                        <option value={'SUNY Cobleskill'}>SUNY Cobleskill</option>
-                        </Form.Select>
+                        <Form.Control placeholder="Organization" 
+                                      onChange={(e) => setOrg(e.target.value)} 
+                                      value={org} />
                     </Form.Group>
                     <Form.Group className="mb-3">
                         <Form.Label>Textbook:</Form.Label>
@@ -109,6 +109,11 @@ const MyCourse = () => {
                                       onChange={(e) => setTextBook(e.target.value)}
                                       value={textbook}/>
                     </Form.Group>
+                    <Form.Check
+                        type="switch"
+                        label="Active Course?"
+                        defaultChecked={active}
+                    />
                     {/* <Button type="submit" onClick={(e) => handleCourseSave(e)}>Submit</Button> */}
             </Form>
         );
@@ -138,7 +143,7 @@ const MyCourse = () => {
                     <ReusableModal show={updateScreen}
                                    hide={hideCourseUpdateForm}
                                    title={"Update Existing Course:"}
-                                   body={renderAddCourseForm}/>
+                                   body={renderUpdateCourseForm}/>
 
                     
                 </Col>
