@@ -195,11 +195,26 @@ const QuizzeySet = () => {
             console.log('Duplicate set: ', isDupSet);
 
             if (!isDupSet) {
-                //move the recent set up to the top of the list.
-                openedSetList.unshift(setObj);
+                console.log('opened set list: ', openedSetList.length)
+                if (openedSetList.length === 10) {  
+                    console.log('I need to remove something....')              
+                    //move the recent set up to the top of the list.
+                    openedSetList.unshift(setObj);
 
-                // update session
-                localStorage.setItem('recent_opened_sets', JSON.stringify(openedSetList))
+                    //remove the last set in the list.
+                    openedSetList.pop();
+
+                    // update session
+                    localStorage.setItem('recent_opened_sets', JSON.stringify(openedSetList))
+                }
+                else
+                {
+                    //move the recent set up to the top of the list.
+                    openedSetList.unshift(setObj);
+
+                    // update session
+                    localStorage.setItem('recent_opened_sets', JSON.stringify(openedSetList))
+                }
             }
         }
     }

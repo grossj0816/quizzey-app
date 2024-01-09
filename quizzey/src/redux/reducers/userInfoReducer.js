@@ -1,7 +1,7 @@
 import { GET_USER_INFO } from "../actions/types";
 
 const initialState = {
-    userInfo: {}
+    getUserInfo: {}
 };
 
 
@@ -10,7 +10,7 @@ export default function(state = initialState, action){
         case GET_USER_INFO:
             return{
                 ...state,
-                userInfo: action.payload
+                getUserInfo: action.payload
             }
         default:
             return state;

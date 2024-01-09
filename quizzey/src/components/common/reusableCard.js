@@ -40,7 +40,7 @@ const ReusableCard = (props) => {
         >
             <Card.Body>
                 <center>
-                    <Card.Title>{adjustTextWidth(innerWidth, title)}</Card.Title>
+                    <Card.Title><i>{adjustTextWidth(innerWidth, title)}</i></Card.Title>
                     {
                         subtitle &&
                         <Card.Subtitle className="mb-2 text-muted">

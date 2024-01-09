@@ -15,12 +15,15 @@ import Toast from 'react-bootstrap/Toast';
 import ListGroup from 'react-bootstrap/ListGroup';
 import { Link } from "react-router-dom";
 import Swal from 'sweetalert2';
+import { useSelector } from "react-redux";
+import { useEffect } from 'react';
+
 
 const Dashboard = () => {
 
     const variant = "Success";
     let myCourses = courseListHandler();
-    let recentSets = JSON.parse(localStorage.getItem('recent_opened_sets'));
+    let recentSets = localStorage.getItem('recent_opened_sets') ? JSON.parse(localStorage.getItem('recent_opened_sets')) : [];
     const [show, setShow] = useState(false); //show state for "Add Course Form" modal
     const [showB, setShowB] = useState(false); //show state for success toast
     const [showC, setShowC] = useState(false); //show state for "Courses list" modal
@@ -28,11 +31,19 @@ const Dashboard = () => {
     const [org, setOrg] = useState("");
     const [textBook, setTextBook] = useState("");
     const [courses, setCourses] = useState(myCourses);
+    const [userName, setUserName] = useState("");
     const count = courses.length;
+    var today = new Date();
+    var currentHour = today.getHours();
+    const userInfo = useSelector(state => state.userInfo.getUserInfo);
 
-    console.log(recentSets)
+    useEffect(() => {
+        if (userInfo.user_metadata) {
+            console.log('user info:', userInfo);
+            setUserName(userInfo.user_metadata.nickname);
+        }
+    }, [userInfo])
 
-    
     const handleOpenCourseLink = (id) => {
         return `/courses/${id}`;
     }
@@ -177,6 +188,12 @@ const Dashboard = () => {
                     </Toast.Body>
                 </Toast>
                 <Row>
+                    {
+                        currentHour < 12 ? <h2><i>Good Morning {userName}! Lets Study!</i></h2> : currentHour < 18 ? <h2><i>Good Afternoon {userName}! You got this!</i></h2> : <h2><i>Good Evening {userName}! Finish strong!</i></h2>
+                    }
+                </Row>
+                <br/>
+                <Row>                  
                     <p id="coursesTitle">Your courses:</p>
                 </Row>
                 <Row>
@@ -184,7 +201,7 @@ const Dashboard = () => {
                         <p id="item">Courses listed: {count}</p>
                     </Col>
                     <Col sm={{span:3, offset:0}} md={{span:3, offset:0}} lg={{span:1, offset:0}}>
-                        <ReusableButton name="View All Courses" variant="secondary"  event={showCourseList} />
+                        <ReusableButton name="All Courses" variant="secondary"  event={showCourseList} />
                     </Col>
                     <Col sm={{span:3, offset:0}} md={{span:3, offset:0}} lg={{span:1, offset:0}}>
                         <ReusableButton name="Add Course"  event={showAddCourseForm} />
@@ -225,7 +242,7 @@ const Dashboard = () => {
                 <Row>
                     {
                     recentSets.map((element, index) => {
-                        if (index < 4) {
+                        if (index < 10) {
                             return(
                                 <Col key={element.setId} xs={{span:10, offset:0}} sm={{span:6, offset:0}} md={{span:6, offset:0}} lg={{span:6, offset:0}}>
                                     <ReusableCard title={element.name} 

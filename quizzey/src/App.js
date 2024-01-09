@@ -13,11 +13,10 @@ import { getUserInformation } from './redux/actions/userInfoActions';
 
 const App = () => {
   
-  const {isAuthenticated, getAccessTokenSilently} = useAuth0();
+  const {user, isAuthenticated, getAccessTokenSilently, isLoading} = useAuth0();
   const origin = window.location.origin;
   const dispatch = useDispatch();
   
-  //TODO: Store token in redux at some point so we can use the token all around the app.
   useEffect(() => {
     localStorage.setItem('recent_opened_sets', []);
     const getAccessToken = async () => {
@@ -28,18 +27,19 @@ const App = () => {
             scope: "read:current_user",
           }
         });
-        return token;
+        dispatch(getUserInformation(token));
       } 
-      catch (error) 
+      catch (e) 
       {
-        console.log(error);
+        console.log(e.message);
       }
        
     }
-    getAccessToken().then(token => {
-      dispatch(getUserInformation(token))
-    });
-  }, [])
+    getAccessToken();
+
+  }, [getAccessTokenSilently, user?.sub])
+
+  
 
   return (
       <Routes>

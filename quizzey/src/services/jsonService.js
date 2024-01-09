@@ -63,6 +63,48 @@ export const quizzeySetHandler = () => {
             name: "Human Anatomy Chapter 4",
             count: 10,
             userName: "Elly"
+        },
+        {
+            setId: 5,
+            courseId: 2,
+            name: "Paramedic Field Clinical Chapter 1",
+            count: 10,
+            userName: "Elly"
+        },
+        {
+            setId: 6,
+            courseId: 2,
+            name: "Paramedic Field Clinical Chapter 2",
+            count: 10,
+            userName: "Elly"
+        },
+        {
+            setId: 7,
+            courseId: 2,
+            name: "Paramedic Field Clinical Chapter 3",
+            count: 10,
+            userName: "Elly"
+        },
+        {
+            setId: 8,
+            courseId: 2,
+            name: "Paramedic Field Clinical Chapter 4",
+            count: 10,
+            userName: "Elly"
+        },
+        {
+            setId: 9,
+            courseId: 3,
+            name: "Paramedic Hospital Clinical Chapter 1",
+            count: 10,
+            userName: "Elly"
+        },
+        {
+            setId: 10,
+            courseId: 3,
+            name: "Paramedic Hospital Clinical Chapter 1",
+            count: 10,
+            userName: "Elly"
         }
     ];
     return quizzeySets;
