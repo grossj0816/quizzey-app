@@ -3,6 +3,8 @@ import Container from "react-bootstrap/esm/Container";
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Header from "../LandingPage/Header";
+import ReusableButton from "../common/reusableButton";
+import ReusableModal from "../common/reusableModal";
 import { courseListHandler, quizzeySetHandler } from "../../services/jsonService";
 import { useEffect, useState } from "react";
 import "./css/CoursePage.css";
@@ -18,10 +20,14 @@ import { Link } from "react-router-dom";
 const MyCourse = () => {
 
     let { id } = useParams(); //courseId
-    const myCourses = courseListHandler();
+    const myCourses = courseListHandler(); //THIS VARIABLE WOULD BE GETTING STATE FROM REDUX
     const [myCourse, setMyCourse] = useState({});
     const [quizzeySets, setQuizzeySets] = useState([]);
     const [ddValues, setDdValues] = useState([]);
+    const [name, setName] = useState("");
+    const [org, setOrg] = useState("");
+    const [textbook, setTextBook] = useState("");
+    const [updateScreen, setUpdateScreen] = useState(false);
 
     // TODO: CLEAN UP THE CODE HERE
     useEffect(() => {
@@ -34,6 +40,9 @@ const MyCourse = () => {
             // find the course that belonggs the course id being passed in as path param
             course = myCourses.find((course) => course.courseId === +id);
             setMyCourse(course);//set the course to our local state var
+            setName(course.name);
+            setOrg(course.org);
+            setTextBook(course.textbook);
 
             sets = sets.filter((element) => element.courseId === +id);
             setDdValues(sets);
@@ -67,6 +76,44 @@ const MyCourse = () => {
         return `/quizzey-set/${id}`;
     }
 
+    const showCourseUpdateForm = (e, courseId) => {
+        setUpdateScreen(true);
+    } 
+
+
+    const hideCourseUpdateForm = (e, courseId) => {
+        setUpdateScreen(false);
+    } 
+
+    //Rendering add new course modal
+    const renderAddCourseForm = () => {
+        return(
+                <Form>
+                    <Form.Group className="mb-3">
+                        <Form.Label>Course Name:</Form.Label>
+                        <Form.Control placeholder="Course Name" 
+                                      onChange={(e) => setName(e.target.value)}
+                                      value={name} />
+                    </Form.Group>
+                    <Form.Group className="mb-3">
+                        {/* TODO: Make this a textbook instead of a select!!! */}
+                        <Form.Label>Organization:</Form.Label>
+                        <Form.Select value={org} onChange={(e) => setOrg(e.target.value)}>
+                        <option value={''}></option>
+                        <option value={'SUNY Cobleskill'}>SUNY Cobleskill</option>
+                        </Form.Select>
+                    </Form.Group>
+                    <Form.Group className="mb-3">
+                        <Form.Label>Textbook:</Form.Label>
+                        <Form.Control placeholder="Textbook"  
+                                      onChange={(e) => setTextBook(e.target.value)}
+                                      value={textbook}/>
+                    </Form.Group>
+                    {/* <Button type="submit" onClick={(e) => handleCourseSave(e)}>Submit</Button> */}
+            </Form>
+        );
+    }
+
     return ( 
     <>
         <Header />
@@ -82,6 +129,20 @@ const MyCourse = () => {
             <Row>
                 <Link style={{margin: '5px'}} to={origin === "http://localhost:3000" ? '/' : '/index.html'} className="boldLink" id="navigateLink">View Dashboard</Link>
             </Row>
+            <Row>
+                <Col sm={{span:3, offset:0}} md={{span:3, offset:0}} lg={{span:1, offset:0}}>
+                    <ReusableButton 
+                        name="Update Course" 
+                        variant="secondary"  
+                        event={showCourseUpdateForm} />
+                    <ReusableModal show={updateScreen}
+                                   hide={hideCourseUpdateForm}
+                                   title={"Update Existing Course:"}
+                                   body={renderAddCourseForm}/>
+
+                    
+                </Col>
+            </Row>            
             <hr />      
             <Row >
                 <Col sm={{span: 6, offset: 0}} md={{span: 6, offset: 0}} lg={{span: 4, offset: 0}}>

@@ -90,7 +90,9 @@ const Dashboard = () => {
         //run the delete process
         let filterResults = courses.filter((element) => element.courseId !== courseId);
         setCourses(filterResults);
-    }
+
+        //TODO: ADD MORE HERE FOR SOFT DELETING COURSE
+    } 
 
     
     //Rendering add new course modal
@@ -132,9 +134,6 @@ const Dashboard = () => {
                                         <div className="fw-bold">{element.name} </div>
                                         {element.org}
                                         </div>
-                                            <Button variant="link">                   
-                                             <Link to={handleOpenCourseLink(element.courseId)} className="boldLink">Update</Link>
-                                            </Button>
                                             &nbsp;&nbsp;
                                             <Button variant="link">                   
                                              <Link to={handleOpenCourseLink(element.courseId)} className="boldLink">View</Link>
