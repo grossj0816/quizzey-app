@@ -12,6 +12,7 @@ import { adjustFlashCardMargins, adjustFlashCardWidth, adjustTextSize } from "..
 import ReactCardFlip from 'react-card-flip';
 import { Link } from "react-router-dom";
 import ProgressBar from 'react-bootstrap/ProgressBar';
+import Dropdown from 'react-bootstrap/Dropdown';
 
 
 
@@ -28,6 +29,7 @@ const QuizzeySet = () => {
     const [total, setTotal] = useState();
     const [flipped, setFlipped] = useState(false);
     const [progress, setProgress] = useState(0);
+    const [disableUpdate, setDisableUpdate] = useState(false);
 
     useEffect(() => {
         const handleWindowResize = () => {
@@ -73,6 +75,11 @@ const QuizzeySet = () => {
         // let initialProgress = (count / total) * 100;
         // console.log("Progress", initialProgress);
         // setProgress(Math.round(initialProgress));
+
+        if(questions.length === 0)
+        {
+            setDisableUpdate(true);
+        }
       }
     },[id])
 
@@ -219,6 +226,10 @@ const QuizzeySet = () => {
         }
     }
 
+    const handleButtonDisable = () => {
+        
+    }
+
 
     return ( 
     <>
@@ -228,15 +239,28 @@ const QuizzeySet = () => {
                 <Col sm={{span:6, offset:0}} md={{span:3, offset:0}} lg={{span:3, offset:0}}>
                     <h4>{quizzeySet.name}</h4>
                 </Col>
-                <Col sm={{span:6, offset:0}} md={{span:3, offset:0}} lg={{span:4, offset:0}}>
-                    <ReusableButton name="Start Over" event={handleStartCountOver}/>
-                </Col>
             </Row>
             <Row>
                 {/* TODO: Put styling in css file */}
                 <div style={{display:'inline-block'}}>
                     <Link style={{margin: '5px'}} to={origin === "http://localhost:3000" ? '/' : '/index.html'} className="boldLink" id="navigateLink">View Dashboard</Link>
                 </div>
+            </Row>
+            <br />
+            <Row>
+                <Dropdown>
+                    <Dropdown.Toggle>
+                        Screen Options:
+                    </Dropdown.Toggle>
+
+                    <Dropdown.Menu>
+                        <Dropdown.Item onClick={handleStartCountOver}>Start Over</Dropdown.Item>
+                        <Dropdown.Divider />
+                        <Dropdown.Item>Add Questions</Dropdown.Item>
+                        <Dropdown.Divider />
+                        <Dropdown.Item>Update Questions</Dropdown.Item>
+                    </Dropdown.Menu>
+                </Dropdown>
             </Row>
             <hr />
             <ProgressBar style={{marginTop: '4vh', marginBottom: '3vh'}} 

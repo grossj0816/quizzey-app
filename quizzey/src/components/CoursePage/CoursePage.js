@@ -9,12 +9,11 @@ import { courseListHandler, quizzeySetHandler } from "../../services/jsonService
 import { useEffect, useState } from "react";
 import "./css/CoursePage.css";
 import Badge from 'react-bootstrap/Badge';
-// import Card from 'react-bootstrap/Card';
-// import Nav from 'react-bootstrap/Nav';
 import Form from 'react-bootstrap/Form';
 import ReusableCard from "../common/reusableCard";
 import {handleUserIcon} from "../../utils/utils.js";
 import { Link } from "react-router-dom";
+import Dropdown from 'react-bootstrap/Dropdown';
 
 
 const MyCourse = () => {
@@ -28,19 +27,21 @@ const MyCourse = () => {
     const [org, setOrg] = useState("");
     const [textbook, setTextBook] = useState("");
     const [active, setActive] = useState(false);
-    const [updateScreen, setUpdateScreen] = useState(false);
+    const [updateScreen, setUpdateScreen] = useState(false); // this is used to toggle the update course modal
+    const [addScreen, setAddScreen] = useState(false); //this is used to toggle the add new set modal
 
     // TODO: CLEAN UP THE CODE HERE
     useEffect(() => {
         let course = {};
-        //TODO: Make a way for quizzey sets to be stored remotely so I'm not making multiple local variables call from quizzeySetHandler();
         let sets = quizzeySetHandler();
         // when the id value from useParams() is available
         if (id) 
         {
             // find the course that belonggs the course id being passed in as path param
             course = myCourses.find((course) => course.courseId === +id);
-            setMyCourse(course);//set the course to our local state var
+            setMyCourse(course);//set the course to our local state variable
+
+            // Individual course information put into local state.
             setName(course.name);
             setOrg(course.org);
             setTextBook(course.textbook);
@@ -78,14 +79,28 @@ const MyCourse = () => {
         return `/quizzey-set/${id}`;
     }
 
-    const showCourseUpdateForm = (e, courseId) => {
+
+
+    // -------------TOGGLE FOR SHOWING/HIDING COURSE UPDATE FORM --------------
+    const showCourseUpdateForm = () => {
         setUpdateScreen(true);
     } 
 
 
-    const hideCourseUpdateForm = (e, courseId) => {
+    const hideCourseUpdateForm = () => {
         setUpdateScreen(false);
     } 
+
+
+    // -------------TOGGLE FOR SHOWING/HIDING ADD SET FORM --------------
+    const showAddSetForm = () => {
+        setAddScreen(true);
+    }
+
+
+    const hideAddSetForm = () => {
+        setAddScreen(false);
+    }
 
     //Rendering add new course modal
     const renderUpdateCourseForm = () => {
@@ -119,6 +134,18 @@ const MyCourse = () => {
         );
     }
 
+    const renderAddSetForm = () => {
+        return(
+            <Form>
+                <Form.Group className="mb-3">
+                    <Form.Label>Set Name:</Form.Label>
+                    <Form.Control placeholder="Set Name:"/>
+                </Form.Group>
+                {/* <Button type="submit" onClick={(e) => handleCourseSave(e)}>Submit</Button> */}
+            </Form>
+        );
+    }
+
     return ( 
     <>
         <Header />
@@ -135,18 +162,26 @@ const MyCourse = () => {
                 <Link style={{margin: '5px'}} to={origin === "http://localhost:3000" ? '/' : '/index.html'} className="boldLink" id="navigateLink">View Dashboard</Link>
             </Row>
             <Row>
-                <Col sm={{span:3, offset:0}} md={{span:3, offset:0}} lg={{span:1, offset:0}}>
-                    <ReusableButton 
-                        name="Update Course" 
-                        variant="secondary"  
-                        event={showCourseUpdateForm} />
-                    <ReusableModal show={updateScreen}
-                                   hide={hideCourseUpdateForm}
-                                   title={"Update Existing Course:"}
-                                   body={renderUpdateCourseForm}/>
+                <Dropdown>
+                    <Dropdown.Toggle className="screenOptions">
+                        Screen Options:
+                    </Dropdown.Toggle>
 
-                    
-                </Col>
+                    <Dropdown.Menu>
+                        <Dropdown.Item onClick={showCourseUpdateForm}>Update Course</Dropdown.Item>
+                        <Dropdown.Divider />
+                        <Dropdown.Item onClick={showAddSetForm}>Add New Set</Dropdown.Item>
+                    </Dropdown.Menu>
+                </Dropdown>
+                <ReusableModal show={updateScreen}
+                               hide={hideCourseUpdateForm}
+                               title={"Update Existing Course:"}
+                               body={renderUpdateCourseForm}/>                    
+                <ReusableModal show={addScreen}
+                               hide={hideAddSetForm}
+                               title={"Add New Set:"}
+                               body={renderAddSetForm}/>
+
             </Row>            
             <hr />      
             <Row >

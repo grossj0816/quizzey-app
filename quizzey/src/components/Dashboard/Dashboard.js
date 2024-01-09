@@ -3,7 +3,6 @@ import Container from "react-bootstrap/esm/Container";
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import "./css/Dashboard.css"
-import ReusableButton from "../common/reusableButton";
 import React, { useState } from 'react';
 import { courseListHandler, quizzeySetHandler } from "../../services/jsonService";
 import ReusableCard from "../common/reusableCard";
@@ -14,9 +13,9 @@ import Button from 'react-bootstrap/Button';
 import Toast from 'react-bootstrap/Toast';
 import ListGroup from 'react-bootstrap/ListGroup';
 import { Link } from "react-router-dom";
-import Swal from 'sweetalert2';
 import { useSelector } from "react-redux";
 import { useEffect } from 'react';
+import Dropdown from 'react-bootstrap/Dropdown';
 
 
 const Dashboard = () => {
@@ -135,22 +134,6 @@ const Dashboard = () => {
                                             <Button variant="link">                   
                                              <Link to={handleOpenCourseLink(element.courseId)} className="boldLink">View</Link>
                                             </Button>
-                                            &nbsp;&nbsp;
-                                            {/* <ReusableButton name="Delete" variant="danger" event={event => Swal.fire({
-                                                title: 'Deleting Course',
-                                                text:  'Are you sure you want to continue?',
-                                                icon: 'warning',
-                                                showCancelButton: true,
-                                                showConfirmButton: true,
-                                                confirmButtonColor: 'red',
-                                                confirmButtonText: 'OK',
-                                                cancelButtonColor: 'blue',
-                                                cancelButtonText: 'CANCEL'
-                                            }).then((result) => {
-                                                result.isConfirmed && handleCourseDelete(event, element.courseId);
-                                            })
-                                            
-                                            }/> */}
                                     </ListGroup.Item>    
                             );
                     })
@@ -196,12 +179,17 @@ const Dashboard = () => {
                     <Col sm={{span:6, offset:0}} md={{span:3, offset:0}} lg={{span:1, offset:0}}>
                         <p id="item">Courses listed: {count}</p>
                     </Col>
-                    <Col sm={{span:3, offset:0}} md={{span:3, offset:0}} lg={{span:1, offset:0}}>
-                        <ReusableButton name="All Courses" variant="secondary"  event={showCourseList} />
-                    </Col>
-                    <Col sm={{span:3, offset:0}} md={{span:3, offset:0}} lg={{span:1, offset:0}}>
-                        <ReusableButton name="Add Course"  event={showAddCourseForm} />
-                    </Col>
+                    <Dropdown>
+                            <Dropdown.Toggle className="screenOptions">
+                                Screen Options:
+                            </Dropdown.Toggle>
+
+                            <Dropdown.Menu>
+                                <Dropdown.Item onClick={showCourseList}>Show All Courses</Dropdown.Item>
+                                <Dropdown.Divider />
+                                <Dropdown.Item onClick={showAddCourseForm}>Add New Course</Dropdown.Item>
+                            </Dropdown.Menu>
+                        </Dropdown>
                     <ReusableModal show={show} 
                                    hide={hideAddCourseForm} 
                                    title={"Add New Course:"}
