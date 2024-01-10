@@ -34,6 +34,7 @@ const QuizzeySet = () => {
     const [addScreen, setAddScreen] = useState(false); //this is used to toggle the add questions modal
     // const [updateScreen, setUpdateScreen] = useState(false); //this is used to toggle the update questions modal.
     const [inputFields, setInputFields] = useState([{question: '', answer: ''}]);
+    const [validated, setValidated] = useState(false);
 
 
 
@@ -76,12 +77,6 @@ const QuizzeySet = () => {
         handleRecentSets(set);
         //get total number of questions-----------------------------------------------------
         setTotal(questions.length);
-
-        // //set the initial progress bar value------------------------------------------------
-        // let initialProgress = (count / total) * 100;
-        // console.log("Progress", initialProgress);
-        // setProgress(Math.round(initialProgress));
-
       }
     },[id])
 
@@ -111,17 +106,6 @@ const QuizzeySet = () => {
         //when we go to the next card, set the state 
         //of the card being flipped to false so we see the next question.
         setFlipped(false);
-
-    //     if (count !== total) 
-    //     {
-    //         let incrementProgress = (count / total) * 100;
-    //         console.log(incrementProgress);
-    //         // setProgress(100);
-    //     } 
-    //     else 
-    //     {
-    //         // setProgress(Math.round(incrementProgress));
-    //     }
     }
 
     const handleCountDecrement = () => {
@@ -228,13 +212,67 @@ const QuizzeySet = () => {
         }
     }
 
-    const addFields = () => {
+    const addField = () => {
         let newField = {question: '', answer: ''};
         setInputFields([...inputFields, newField]);
     }
 
+    const removeField = () => {
+        let data = [...inputFields];
+        let newData = data.slice(0, -1);
+        setInputFields(newData);
+    }
 
-    // -------------TOGGLE FOR SHOWING/HIDING ADD QUESTIONS FORM -------------- 
+    const handleFormChange = (event, index) => {
+        let data = [...inputFields]; //storing input field state in "data" variable.
+        data[index][event.target.name] = event.target.value; //set the correct value to the specific input by index and by name attribute.
+        setInputFields(data); //set the state of the data in add questions screen to what we updated.
+    }
+
+    const handleAddFormSubmit = (event) => {
+
+        const form = event.currentTarget;
+        let isInvalid = undefined;
+        console.log(form);
+        if (form.checkValidity() === false)//if our form results are not valid 
+        {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+        setValidated(true);
+
+        //loop through current list of questions submitted by user.
+        inputFields.forEach((item, index) => {
+            //if we come across a question or answer that wasn't submitted...
+            if (item.question === "" || item.answer === "") 
+            {
+                //we set the isInvalid flag to true.
+                isInvalid = true;
+                return;   
+            }
+            else
+            {
+                //if there are no errors, we set flag to false.
+                isInvalid = false;
+            }
+        });
+
+        // if all the records are valid...
+        if (isInvalid !== true)
+        {
+            /*
+            TODO: AT SOME POINT PUT SOMETHING HERE FOR PROCESSING
+            SUBMITTING QUESTIONS TO THE DATABASE. 
+            */
+            event.preventDefault();
+            console.log(inputFields);
+            setValidated(false); //reset the validated state for the next form submit.
+            hideAddQuestionsForm();//hide the modal and reset the form.
+        }
+    };
+
+
+    // -------------TOGGLE FOR SHOWING/HIDING ADD QUESTIONS FORM & RENDER FUNCTION -------------- 
     const showAddQuestionsForm = () => {
         setAddScreen(true);
     }
@@ -251,31 +289,51 @@ const QuizzeySet = () => {
                 <ReusableButton name="Add Row"
                                 type="button" 
                                 variant="primary"
-                                event={addFields}/>
+                                event={addField}/>
+                &nbsp;&nbsp;
+                <ReusableButton name="Delete Row"
+                                type="button" 
+                                variant="primary"
+                                event={removeField}/>
                 <br />
                 <br />
                 <Row>
+                <React.Fragment>
+                    <Form noValidate validated={validated} onSubmit={handleAddFormSubmit}>
                     {
                         inputFields.map((element, index) => {
                             return(
-                                <React.Fragment key={index}>
-                                    <Form>
+                                    <React.Fragment key={index}>
                                         <Form.Group className="mb-3">
-                                            <Form.Label>Question:</Form.Label>
-                                            <Form.Control placeholder="Question:"
-                                                        value={element.question} />
+                                            <Form.Label>Question {index + 1}:</Form.Label>
+                                            <Form.Control placeholder={`Question:`}
+                                                          required
+                                                          name="question"
+                                                          value={element.question} 
+                                                          onChange={(e) => {handleFormChange(e, index)}} />
+                                            <Form.Control.Feedback type="invalid">You need to input a question!</Form.Control.Feedback>
                                         </Form.Group>
                                         <Form.Group className="mb-3">
-                                            <Form.Label>Answer:</Form.Label>
-                                            <Form.Control placeholder="Answer:"
-                                                        value={element.answer} />
+                                            <Form.Label>Answer {index + 1}:</Form.Label>
+                                            <Form.Control placeholder={`Answer:`}
+                                                          required
+                                                          name="answer"
+                                                          value={element.answer}
+                                                          onChange={(e) =>{handleFormChange(e, index)}} />
+                                            <Form.Control.Feedback type="invalid">You need to input an answer!</Form.Control.Feedback>
                                         </Form.Group>
                                         <hr className="hr-margin"/>
-                                    </Form>
-                                </React.Fragment>
+                                    </React.Fragment>
                             );
                         })
                     }
+                    <ReusableButton  name="Submit"
+                            type="submit"
+                            variant="primary"
+                            event={handleAddFormSubmit}/>
+
+                    </Form>
+                </React.Fragment>
                 </Row>
             </React.Fragment>
         );
@@ -327,7 +385,7 @@ const QuizzeySet = () => {
                 </Dropdown>
                 <ReusableModal show={addScreen}
                                hide={hideAddQuestionsForm}
-                               title={"Add New Questions:"}
+                               title={"Add New Question(s):"}
                                body={renderAddQuestionsForm} 
                                fullScreen={true} />
             </Row>
@@ -343,41 +401,43 @@ const QuizzeySet = () => {
                          
                         if ((index + 1) === count) {
                             return(
-                                <ReactCardFlip isFlipped={flipped} flipDirection="vertical">
-                                    {/* FRONT SIDE */}
-                                    <Card 
+                                <React.Fragment key={index}>
+                                    <ReactCardFlip isFlipped={flipped} flipDirection="vertical">
+                                        {/* FRONT SIDE */}
+                                        <Card 
+                                            className="flashcard" 
+                                            style={{ width: adjustFlashCardWidth(innerWidth), height: '50vh', marginLeft: adjustFlashCardMargins(innerWidth) }}
+                                            bg={variant.toLowerCase()}
+                                            key={variant}
+                                            text={variant.toLowerCase() === 'light' ? 'dark' : 'white'}
+                                            onClick={handleCardFlip}
+                                        >
+                                        <Card.Body>
+                                            <Card.Text className="flashcardText" style={{fontSize: adjustTextSize(innerWidth)}}>
+                                                {element.question}
+                                            </Card.Text>
+                                        </Card.Body>
+                                        </Card>
+
+
+
+                                        {/* BACK SIDE */}
+                                        <Card 
                                         className="flashcard" 
                                         style={{ width: adjustFlashCardWidth(innerWidth), height: '50vh', marginLeft: adjustFlashCardMargins(innerWidth) }}
                                         bg={variant.toLowerCase()}
                                         key={variant}
                                         text={variant.toLowerCase() === 'light' ? 'dark' : 'white'}
                                         onClick={handleCardFlip}
-                                    >
-                                    <Card.Body>
-                                        <Card.Text className="flashcardText" style={{fontSize: adjustTextSize(innerWidth)}}>
-                                            {element.question}
-                                        </Card.Text>
-                                    </Card.Body>
-                                    </Card>
-
-
-
-                                    {/* BACK SIDE */}
-                                    <Card 
-                                    className="flashcard" 
-                                    style={{ width: adjustFlashCardWidth(innerWidth), height: '50vh', marginLeft: adjustFlashCardMargins(innerWidth) }}
-                                    bg={variant.toLowerCase()}
-                                    key={variant}
-                                    text={variant.toLowerCase() === 'light' ? 'dark' : 'white'}
-                                    onClick={handleCardFlip}
-                                    >
-                                    <Card.Body>
-                                        <Card.Text className="flashcardText" style={{fontSize: adjustTextSize(innerWidth)}}>
-                                        {element.answer}
-                                        </Card.Text>
-                                    </Card.Body>
-                                    </Card>
-                                </ReactCardFlip>
+                                        >
+                                        <Card.Body>
+                                            <Card.Text className="flashcardText" style={{fontSize: adjustTextSize(innerWidth)}}>
+                                            {element.answer}
+                                            </Card.Text>
+                                        </Card.Body>
+                                        </Card>
+                                    </ReactCardFlip>
+                                </React.Fragment>
                             );
                         }
                         return(<></>);
