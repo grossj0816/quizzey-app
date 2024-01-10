@@ -84,14 +84,14 @@ const Dashboard = () => {
         // TODO: ADD MORE HERE WHEN WE DO SAVE COURSES 
     }
 
-    const handleCourseDelete = (e, courseId) => {
+    // const handleCourseDelete = (e, courseId) => {
         
-        //run the delete process
-        let filterResults = courses.filter((element) => element.courseId !== courseId);
-        setCourses(filterResults);
+    //     //run the delete process
+    //     let filterResults = courses.filter((element) => element.courseId !== courseId);
+    //     setCourses(filterResults);
 
-        //TODO: ADD MORE HERE FOR SOFT DELETING COURSE
-    } 
+    //     //TODO: ADD MORE HERE FOR SOFT DELETING COURSE
+    // } 
 
     
     //Rendering add new course modal

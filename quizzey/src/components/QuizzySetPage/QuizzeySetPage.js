@@ -5,6 +5,7 @@ import Row from "react-bootstrap/esm/Row";
 import { useParams } from "react-router-dom";
 import { listQuestionsHandler, quizzeySetHandler } from "../../services/jsonService";
 import ReusableButton from "../common/reusableButton";
+import ReusableModal from './../common/reusableModal';
 import Header from "../LandingPage/Header";
 import Card from 'react-bootstrap/Card';
 import "./css/QuizzeySetPage.css";
@@ -13,8 +14,9 @@ import ReactCardFlip from 'react-card-flip';
 import { Link } from "react-router-dom";
 import ProgressBar from 'react-bootstrap/ProgressBar';
 import Dropdown from 'react-bootstrap/Dropdown';
-
-
+import Form from 'react-bootstrap/Form';
+import React from "react";
+// import { Scrollbars } from 'react-custom-scrollbars';
 
 
 
@@ -29,7 +31,11 @@ const QuizzeySet = () => {
     const [total, setTotal] = useState();
     const [flipped, setFlipped] = useState(false);
     const [progress, setProgress] = useState(0);
-    const [disableUpdate, setDisableUpdate] = useState(false);
+    const [addScreen, setAddScreen] = useState(false); //this is used to toggle the add questions modal
+    // const [updateScreen, setUpdateScreen] = useState(false); //this is used to toggle the update questions modal.
+    const [inputFields, setInputFields] = useState([{question: '', answer: ''}]);
+
+
 
     useEffect(() => {
         const handleWindowResize = () => {
@@ -76,10 +82,6 @@ const QuizzeySet = () => {
         // console.log("Progress", initialProgress);
         // setProgress(Math.round(initialProgress));
 
-        if(questions.length === 0)
-        {
-            setDisableUpdate(true);
-        }
       }
     },[id])
 
@@ -226,9 +228,71 @@ const QuizzeySet = () => {
         }
     }
 
-    const handleButtonDisable = () => {
-        
+    const addFields = () => {
+        let newField = {question: '', answer: ''};
+        setInputFields([...inputFields, newField]);
     }
+
+
+    // -------------TOGGLE FOR SHOWING/HIDING ADD QUESTIONS FORM -------------- 
+    const showAddQuestionsForm = () => {
+        setAddScreen(true);
+    }
+
+    const hideAddQuestionsForm = () => {
+        let resetField = {question: '', answer: ''};
+        setAddScreen(false);
+        setInputFields([resetField]);
+    }
+
+    const renderAddQuestionsForm = () => {
+        return(
+            <React.Fragment>
+                <ReusableButton name="Add Row"
+                                type="button" 
+                                variant="primary"
+                                event={addFields}/>
+                <br />
+                <br />
+                <Row>
+                    {
+                        inputFields.map((element, index) => {
+                            return(
+                                <React.Fragment key={index}>
+                                    <Form>
+                                        <Form.Group className="mb-3">
+                                            <Form.Label>Question:</Form.Label>
+                                            <Form.Control placeholder="Question:"
+                                                        value={element.question} />
+                                        </Form.Group>
+                                        <Form.Group className="mb-3">
+                                            <Form.Label>Answer:</Form.Label>
+                                            <Form.Control placeholder="Answer:"
+                                                        value={element.answer} />
+                                        </Form.Group>
+                                        <hr className="hr-margin"/>
+                                    </Form>
+                                </React.Fragment>
+                            );
+                        })
+                    }
+                </Row>
+            </React.Fragment>
+        );
+    }
+
+
+    // -------------TOGGLE FOR SHOWING/HIDING ADD QUESTIONS FORM -------------- 
+    // const showUpdateQuestionsForm = () => {
+    //     setUpdateScreen(true);
+    // }
+
+    // const hideUpdateQuestionsForm = () => {
+    //     setUpdateScreen(false);
+    // }
+
+
+
 
 
     return ( 
@@ -256,11 +320,16 @@ const QuizzeySet = () => {
                     <Dropdown.Menu>
                         <Dropdown.Item onClick={handleStartCountOver}>Start Over</Dropdown.Item>
                         <Dropdown.Divider />
-                        <Dropdown.Item>Add Questions</Dropdown.Item>
+                        <Dropdown.Item onClick={showAddQuestionsForm}>Add Questions</Dropdown.Item>
                         <Dropdown.Divider />
-                        <Dropdown.Item>Update Questions</Dropdown.Item>
+                        <Dropdown.Item disabled={total === 0 ? true : false}>Update Questions</Dropdown.Item>
                     </Dropdown.Menu>
                 </Dropdown>
+                <ReusableModal show={addScreen}
+                               hide={hideAddQuestionsForm}
+                               title={"Add New Questions:"}
+                               body={renderAddQuestionsForm} 
+                               fullScreen={true} />
             </Row>
             <hr />
             <ProgressBar style={{marginTop: '4vh', marginBottom: '3vh'}} 

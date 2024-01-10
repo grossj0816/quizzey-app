@@ -92,17 +92,6 @@ const MyCourse = () => {
     } 
 
 
-    // -------------TOGGLE FOR SHOWING/HIDING ADD SET FORM --------------
-    const showAddSetForm = () => {
-        setAddScreen(true);
-    }
-
-
-    const hideAddSetForm = () => {
-        setAddScreen(false);
-    }
-
-    //Rendering add new course modal
     const renderUpdateCourseForm = () => {
         return(
                 <Form>
@@ -133,6 +122,17 @@ const MyCourse = () => {
             </Form>
         );
     }
+
+    // -------------TOGGLE FOR SHOWING/HIDING ADD SET FORM --------------
+    const showAddSetForm = () => {
+        setAddScreen(true);
+    }
+
+
+    const hideAddSetForm = () => {
+        setAddScreen(false);
+    }
+
 
     const renderAddSetForm = () => {
         return(

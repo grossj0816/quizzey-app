@@ -9,7 +9,8 @@ const ReusableModal = (props) => {
     const {show,
            hide, 
            title,
-           body} = props;
+           body,
+           fullScreen} = props;
 
     // const [innerWidth, setInnerWidth] = useState(window.innerWidth);
 
@@ -32,6 +33,7 @@ const ReusableModal = (props) => {
          aria-labelledby="contained-modal-title-vcenter"
          size="lg"
          centered
+         fullscreen={fullScreen}
         >
             <Modal.Header closeButton>
                 <Modal.Title id="contained-modal-title-vcenter">

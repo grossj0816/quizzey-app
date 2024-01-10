@@ -17,6 +17,10 @@
     font-size: large;
 }
 
+#addScreenBackground{
+    background-color: gray;
+}
+
 .rowSpacing{
     margin-top: 8vh;
 }
@@ -25,4 +29,13 @@
 .flashcardText{
     text-align: center;
     margin-top: 150px;
+}
+
+.hr-margin{
+    color: black;
+    height: 10px;
+}
+
+.modal-body{
+    background-color:aliceblue;
 }
