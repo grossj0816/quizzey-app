@@ -27,14 +27,15 @@ const QuizzeySet = () => {
     const [innerWidth, setInnerWidth] = useState(window.innerWidth);
     const [quizzeySet, setQuizzeySet] = useState({});
     const [questions, setQuestions] = useState([]);
-    const [count, setCount] = useState(1); //the number count of what question we are currently on.
+    const [count, setCount] = useState(1); //the number count of what question we are currently on
     const [total, setTotal] = useState();
     const [flipped, setFlipped] = useState(false);
     const [progress, setProgress] = useState(0);
     const [addScreen, setAddScreen] = useState(false); //this is used to toggle the add questions modal
-    // const [updateScreen, setUpdateScreen] = useState(false); //this is used to toggle the update questions modal.
+    const [updateScreen, setUpdateScreen] = useState(false); //this is used to toggle the update questions modal
     const [inputFields, setInputFields] = useState([{question: '', answer: ''}]);
-    const [validated, setValidated] = useState(false);
+    const [validated, setValidated] = useState(false); //state for validating add form submission
+    const [validForUpdate, setValidForUpdate] = useState(false); //state for validating update form submission
 
 
 
@@ -223,10 +224,16 @@ const QuizzeySet = () => {
         setInputFields(newData);
     }
 
-    const handleFormChange = (event, index) => {
+    const handleAddFormChange = (event, index) => {
         let data = [...inputFields]; //storing input field state in "data" variable.
         data[index][event.target.name] = event.target.value; //set the correct value to the specific input by index and by name attribute.
         setInputFields(data); //set the state of the data in add questions screen to what we updated.
+    }
+
+    const handleUpdateFormChange = (event, index) => {
+        let data = [...questions]; //storing input field state in "data" variable.
+        data[index][event.target.name] = event.target.value; //set the correct value to the specific input by index and by name attribute.
+        setQuestions(data); //set the state of the data in add questions screen to what we updated.
     }
 
     const handleAddFormSubmit = (event) => {
@@ -271,8 +278,44 @@ const QuizzeySet = () => {
         }
     };
 
+    const handleUpdateFormSubmit = (event) => {
 
-    // -------------TOGGLE FOR SHOWING/HIDING ADD QUESTIONS FORM & RENDER FUNCTION -------------- 
+        const form = event.currentTarget;
+        let isInvalid = undefined;
+        console.log(form);
+        if (form.checkValidity() === false)//if our form results are not valid 
+        {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+        setValidForUpdate(true);
+
+        //loop through current list of questions submitted by user.
+        questions.forEach((item, index) => {
+            //if we come across a question or answer that wasn't submitted...
+            if (item.question === "" || item.answer === "") 
+            {
+                //we set the isInvalid flag to true.
+                isInvalid = true;
+                return;   
+            }
+        });
+        // if all the records are valid...
+        if (isInvalid !== true)
+        {
+            /*
+            TODO: AT SOME POINT PUT SOMETHING HERE FOR PROCESSING
+            SUBMITTING QUESTIONS TO THE DATABASE. 
+            */
+            event.preventDefault();
+            console.log(questions);
+            setValidForUpdate(false); //reset the validated state for the next form submit.
+            hideUpdateQuestionsForm();//hide the modal and reset the form.
+        }
+    };
+
+
+    // -------------TOGGLE FOR SHOWING/HIDING ADD QUESTIONS FORM -------------- 
     const showAddQuestionsForm = () => {
         setAddScreen(true);
     }
@@ -310,7 +353,7 @@ const QuizzeySet = () => {
                                                           required
                                                           name="question"
                                                           value={element.question} 
-                                                          onChange={(e) => {handleFormChange(e, index)}} />
+                                                          onChange={(e) => {handleAddFormChange(e, index)}} />
                                             <Form.Control.Feedback type="invalid">You need to input a question!</Form.Control.Feedback>
                                         </Form.Group>
                                         <Form.Group className="mb-3">
@@ -319,7 +362,7 @@ const QuizzeySet = () => {
                                                           required
                                                           name="answer"
                                                           value={element.answer}
-                                                          onChange={(e) =>{handleFormChange(e, index)}} />
+                                                          onChange={(e) =>{handleAddFormChange(e, index)}} />
                                             <Form.Control.Feedback type="invalid">You need to input an answer!</Form.Control.Feedback>
                                         </Form.Group>
                                         <hr className="hr-margin"/>
@@ -339,15 +382,64 @@ const QuizzeySet = () => {
         );
     }
 
+    // -------------TOGGLE FOR SHOWING/HIDING UPDATE QUESTIONS FORM -------------- 
+ 
+    const showUpdateQuestionsForm = () => {
+        setUpdateScreen(true);
+    }
 
-    // -------------TOGGLE FOR SHOWING/HIDING ADD QUESTIONS FORM -------------- 
-    // const showUpdateQuestionsForm = () => {
-    //     setUpdateScreen(true);
-    // }
+    const hideUpdateQuestionsForm = () => {
+        setUpdateScreen(false);
+    }
+    
 
-    // const hideUpdateQuestionsForm = () => {
-    //     setUpdateScreen(false);
-    // }
+    const renderUpdateQuestionsForm = () => {
+        return(
+            <React.Fragment>
+                <br />
+                <br />
+                <Row>
+                <React.Fragment>
+                    <Form  noValidate validated={validForUpdate} onSubmit={handleUpdateFormSubmit}
+                    >
+                    {
+                        questions.map((element, index) => {
+                            return(
+                                <React.Fragment key={index}>
+                                        <Form.Group className="mb-3">
+                                            <Form.Label>Question {index + 1}:</Form.Label>
+                                            <Form.Control placeholder={`Question:`}
+                                                          required
+                                                          name="question"
+                                                          value={element.question} 
+                                                          onChange={(e) => {handleUpdateFormChange(e, index)}} />
+                                            <Form.Control.Feedback type="invalid">You need to input a question!</Form.Control.Feedback>
+                                        </Form.Group>
+                                        <Form.Group className="mb-3">
+                                            <Form.Label>Answer {index + 1}:</Form.Label>
+                                            <Form.Control placeholder={`Answer:`}
+                                                          required
+                                                          name="answer"
+                                                          value={element.answer}
+                                                          onChange={(e) =>{handleUpdateFormChange(e, index)}} />
+                                            <Form.Control.Feedback type="invalid">You need to input an answer!</Form.Control.Feedback>
+                                        </Form.Group>
+                                        <hr className="hr-margin"/>
+                                </React.Fragment>
+
+                            )
+                        })
+                    }
+                    <ReusableButton  name="Submit"
+                            type="submit"
+                            variant="primary"
+                            event={handleUpdateFormSubmit}/>
+                    </Form>
+                </React.Fragment>   
+                </Row>
+            </React.Fragment>
+        );
+    }
 
 
 
@@ -380,13 +472,18 @@ const QuizzeySet = () => {
                         <Dropdown.Divider />
                         <Dropdown.Item onClick={showAddQuestionsForm}>Add Questions</Dropdown.Item>
                         <Dropdown.Divider />
-                        <Dropdown.Item disabled={total === 0 ? true : false}>Update Questions</Dropdown.Item>
+                        <Dropdown.Item disabled={total === 0 ? true : false} onClick={showUpdateQuestionsForm}>Update Questions</Dropdown.Item>
                     </Dropdown.Menu>
                 </Dropdown>
                 <ReusableModal show={addScreen}
                                hide={hideAddQuestionsForm}
                                title={"Add New Question(s):"}
                                body={renderAddQuestionsForm} 
+                               fullScreen={true} />
+                <ReusableModal show={updateScreen}
+                               hide={hideUpdateQuestionsForm}
+                               title={"Update Existing Question(s):"}
+                               body={renderUpdateQuestionsForm} 
                                fullScreen={true} />
             </Row>
             <hr />
