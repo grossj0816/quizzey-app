@@ -41,28 +41,32 @@ export const quizzeySetHandler = () => {
             courseId: 1,
             name: "Human Anatomy Chapter 1",
             count: 20,
-            userName: "Elly"
+            userName: "Elly",
+            active: true
         },
         {
             setId: 2,
             courseId: 1,
             name: "Human Anatomy Chapter 2",
             count: 18,
-            userName: "Elly"
+            userName: "Elly",
+            active: true
         },
         {
             setId: 3,
             courseId: 1,
             name: "Human Anatomy Chapter 3",
             count: 30,
-            userName: "Elly"
+            userName: "Elly",
+            active: true
         },
         {
             setId: 4,
             courseId: 1,
             name: "Human Anatomy Chapter 4",
             count: 10,
-            userName: "Elly"
+            userName: "Elly",
+            active: true
         },
         {
             setId: 5,

@@ -15,8 +15,8 @@ import { Link } from "react-router-dom";
 import ProgressBar from 'react-bootstrap/ProgressBar';
 import Dropdown from 'react-bootstrap/Dropdown';
 import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
 import React from "react";
-// import { Scrollbars } from 'react-custom-scrollbars';
 
 
 
@@ -26,6 +26,8 @@ const QuizzeySet = () => {
     const variant = "Light";
     const [innerWidth, setInnerWidth] = useState(window.innerWidth);
     const [quizzeySet, setQuizzeySet] = useState({});
+    const [name, setName] = useState("");
+    const [active, setActive] =useState(false);
     const [questions, setQuestions] = useState([]);
     const [count, setCount] = useState(1); //the number count of what question we are currently on
     const [total, setTotal] = useState();
@@ -33,9 +35,13 @@ const QuizzeySet = () => {
     const [progress, setProgress] = useState(0);
     const [addScreen, setAddScreen] = useState(false); //this is used to toggle the add questions modal
     const [updateScreen, setUpdateScreen] = useState(false); //this is used to toggle the update questions modal
+    const [indSetScreen, setIndSetScreen] = useState(false); //this is used to toggle the update set modal
     const [inputFields, setInputFields] = useState([{question: '', answer: ''}]);
-    const [validated, setValidated] = useState(false); //state for validating add form submission
-    const [validForUpdate, setValidForUpdate] = useState(false); //state for validating update form submission
+    const [validated, setValidated] = useState(false); //state for validating add questions form submission
+    const [validForUpdate, setValidForUpdate] = useState(false); //state for validating update/delete questions form submission
+    const [isSetValid, setIsSetValid] = useState(false); //state for validating updating set data.
+    const [deleteOperation, setDeleteOperation] = useState(false); //state of displaying hidden elements for marking question for deletion
+    const [updateOperation, setUpdateOperation] = useState(false); //state of displaying hidden elements for allowing updating questions.
 
 
 
@@ -72,6 +78,8 @@ const QuizzeySet = () => {
         const sets =  quizzeySetHandler();
         //find the set with the same setID that we are getting from the url path param
         set = sets.find((set) => set.setId === +id);
+        setName(set.name);
+        setActive(set.active);
         setQuizzeySet(set);
 
         // TODO: Set up this in the dashboard at some point.
@@ -236,6 +244,21 @@ const QuizzeySet = () => {
         setQuestions(data); //set the state of the data in add questions screen to what we updated.
     }
 
+    const handleDeleteSwitch = (event, index) => {
+        let data = [...questions];
+        // console.log("SWITCH CHANGE:", event.target.checked);
+        data[index][event.target.name] = event.target.checked;
+        setQuestions(data);
+    }
+
+    const handleSetActive = (event, index) => {
+        let data = {...quizzeySet};
+        console.log("SWITCH CHANGE:", event.target.checked);
+        data[index][event.target.name] = event.target.checked;
+        setQuizzeySet(data);
+    }
+
+
     const handleAddFormSubmit = (event) => {
 
         const form = event.currentTarget;
@@ -278,7 +301,7 @@ const QuizzeySet = () => {
         }
     };
 
-    const handleUpdateFormSubmit = (event) => {
+    const handleUpdateFormSubmit = (event, submitType) => {
 
         const form = event.currentTarget;
         let isInvalid = undefined;
@@ -307,13 +330,88 @@ const QuizzeySet = () => {
             TODO: AT SOME POINT PUT SOMETHING HERE FOR PROCESSING
             SUBMITTING QUESTIONS TO THE DATABASE. 
             */
-            event.preventDefault();
-            console.log(questions);
-            setValidForUpdate(false); //reset the validated state for the next form submit.
-            hideUpdateQuestionsForm();//hide the modal and reset the form.
+           if (submitType === "UPDATE") {
+                console.log("CALL UPDATE QUESTIONS API!!!");
+                event.preventDefault();
+                console.log(questions);
+                setValidForUpdate(false); //reset the validated state for the next form submit.
+                hideUpdateQuestionsForm();//hide the modal and reset the form.
+           }
+           else
+           {
+                console.log("CALL DELETE QUESTIONS API!!!");
+                event.preventDefault();
+                console.log(questions);
+                setValidForUpdate(false); //reset the validated state for the next form submit.
+                hideUpdateQuestionsForm();//hide the modal and reset the form.
+           }
         }
     };
 
+    const handleSetUpdate = (event) => {
+        const form = event.currentTarget;
+        let isInvalid = undefined;
+        console.log(form);
+        if (form.checkValidity() === false)//if our form results are not valid 
+        {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+        setIsSetValid(true);
+
+        if (name === "") 
+        {
+            isInvalid = true;
+            return;
+        }
+
+        if (isInvalid !== true) 
+        {
+            let data = {...quizzeySet};
+            data.name = name;
+            // console.log(data);
+            setQuizzeySet(data);
+            event.preventDefault();
+            setIsSetValid(false); //reset the validated state for the next form submit.
+            hideUpdateSetForm();
+        }
+    }
+
+
+    //-------------- TOGGLE FOR SHOWING/HIDING UPDATE IND SET FORM ------------------
+    const showUpdateSetForm = () => {
+        setIndSetScreen(true);
+    }
+
+    const hideUpdateSetForm = () => {
+        setIndSetScreen(false);
+    }
+
+    const renderUpdateSetForm = () => {
+        return(
+            <Form noValidate validated={isSetValid} onSubmit={handleSetUpdate}>
+                    <Form.Group className="mb-3">
+                        <Form.Label>Set Name:</Form.Label>
+                        <Form.Control placeholder="Set Name" 
+                                      required
+                                      name="name"
+                                      onChange={(e) => {setName(e.target.value)}}
+                                      value={name} />
+                        <Form.Control.Feedback type="invalid">You need to input a set name!</Form.Control.Feedback>
+                    </Form.Group>
+                    <Form.Check
+                        type="switch"
+                        label="Active Course?"
+                        onChange={handleSetActive}
+                        defaultChecked={active}
+                        value={active}
+                    />
+                    <Button variant="primary"
+                            onClick={(e) => handleSetUpdate(e)}
+                            >Submit</Button>
+            </Form>
+        );
+    }
 
     // -------------TOGGLE FOR SHOWING/HIDING ADD QUESTIONS FORM -------------- 
     const showAddQuestionsForm = () => {
@@ -371,10 +469,8 @@ const QuizzeySet = () => {
                         })
                     }
                     <ReusableButton  name="Submit"
-                            type="submit"
                             variant="primary"
                             event={handleAddFormSubmit}/>
-
                     </Form>
                 </React.Fragment>
                 </Row>
@@ -392,16 +488,48 @@ const QuizzeySet = () => {
         setUpdateScreen(false);
     }
     
+    const renderUIForUpdate = () => {
+        if (updateOperation === false) 
+        {
+            setUpdateOperation(true);    
+        }
+        else
+        {
+            setUpdateOperation(false);
+        }
+    }
+
+    const renderUIForDelete = () => {
+        if (deleteOperation === false) 
+        {
+            setDeleteOperation(true);    
+        }
+        else
+        {
+            setDeleteOperation(false);
+        }
+    }
+
 
     const renderUpdateQuestionsForm = () => {
         return(
             <React.Fragment>
+                <ReusableButton name="Update?"
+                                type="button" 
+                                variant="primary"
+                                event={renderUIForUpdate}
+                                disable={deleteOperation}/>
+                &nbsp;&nbsp;
+                <ReusableButton name="Delete?"
+                                type="button" 
+                                variant="danger"
+                                event={renderUIForDelete}
+                                disable={updateOperation}/>
                 <br />
                 <br />
                 <Row>
                 <React.Fragment>
-                    <Form  noValidate validated={validForUpdate} onSubmit={handleUpdateFormSubmit}
-                    >
+                    <Form  noValidate validated={validForUpdate} onSubmit={handleUpdateFormSubmit}>
                     {
                         questions.map((element, index) => {
                             return(
@@ -424,26 +552,32 @@ const QuizzeySet = () => {
                                                           onChange={(e) =>{handleUpdateFormChange(e, index)}} />
                                             <Form.Control.Feedback type="invalid">You need to input an answer!</Form.Control.Feedback>
                                         </Form.Group>
+                                        <Form.Check type="switch"
+                                                    label="Delete this question?"
+                                                    name="delete"
+                                                    style={deleteOperation !== true ? {display: "none"} : {}}
+                                                    onChange={(e) => {handleDeleteSwitch(e, index)}}/>
                                         <hr className="hr-margin"/>
                                 </React.Fragment>
 
                             )
                         })
                     }
-                    <ReusableButton  name="Submit"
-                            type="submit"
-                            variant="primary"
-                            event={handleUpdateFormSubmit}/>
+                        <Button variant="primary" 
+                                style={updateOperation !== true ? {display: "none"} : {}}
+                                onClick={(e) => handleUpdateFormSubmit(e, "UPDATE")}
+                                >Submit Update</Button>
+                        &nbsp;
+                        <Button variant="danger" 
+                                style={deleteOperation !== true ? {display: "none"} : {}}
+                                onClick={(e) => handleUpdateFormSubmit(e, "DELETE")}
+                                >Submit Delete</Button>
                     </Form>
                 </React.Fragment>   
                 </Row>
             </React.Fragment>
         );
     }
-
-
-
-
 
     return ( 
     <>
@@ -470,21 +604,28 @@ const QuizzeySet = () => {
                     <Dropdown.Menu>
                         <Dropdown.Item onClick={handleStartCountOver}>Start Over</Dropdown.Item>
                         <Dropdown.Divider />
+                        <Dropdown.Item onClick={showUpdateSetForm}>Update Set</Dropdown.Item>
+                        <Dropdown.Divider />
                         <Dropdown.Item onClick={showAddQuestionsForm}>Add Questions</Dropdown.Item>
                         <Dropdown.Divider />
-                        <Dropdown.Item disabled={total === 0 ? true : false} onClick={showUpdateQuestionsForm}>Update Questions</Dropdown.Item>
+                        <Dropdown.Item disabled={total === 0 ? true : false} onClick={showUpdateQuestionsForm}>Update / Delete</Dropdown.Item>
                     </Dropdown.Menu>
                 </Dropdown>
-                <ReusableModal show={addScreen}
+                <ReusableModal show={addScreen} //Add Questions Modal
                                hide={hideAddQuestionsForm}
                                title={"Add New Question(s):"}
                                body={renderAddQuestionsForm} 
                                fullScreen={true} />
-                <ReusableModal show={updateScreen}
+                <ReusableModal show={updateScreen} //Update/Delete Questions Modal
                                hide={hideUpdateQuestionsForm}
-                               title={"Update Existing Question(s):"}
+                               title={"Update/Delete Existing Question(s):"}
                                body={renderUpdateQuestionsForm} 
                                fullScreen={true} />
+                <ReusableModal show={indSetScreen}
+                               hide={hideUpdateSetForm}
+                               title={"Update Existing Set"}
+                               body={renderUpdateSetForm}
+                               fullScreen={false}/>
             </Row>
             <hr />
             <ProgressBar style={{marginTop: '4vh', marginBottom: '3vh'}} 

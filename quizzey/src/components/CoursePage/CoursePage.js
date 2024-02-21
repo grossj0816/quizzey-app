@@ -14,6 +14,7 @@ import ReusableCard from "../common/reusableCard";
 import {handleUserIcon} from "../../utils/utils.js";
 import { Link } from "react-router-dom";
 import Dropdown from 'react-bootstrap/Dropdown';
+import Button from 'react-bootstrap/Button';
 
 
 const MyCourse = () => {
@@ -23,12 +24,15 @@ const MyCourse = () => {
     const [myCourse, setMyCourse] = useState({});
     const [quizzeySets, setQuizzeySets] = useState([]);
     const [ddValues, setDdValues] = useState([]);
-    const [name, setName] = useState("");
+    const [crsName, setCrsName] = useState("");
     const [org, setOrg] = useState("");
     const [textbook, setTextBook] = useState("");
     const [active, setActive] = useState(false);
+    const [setName, setSName] = useState("");
     const [updateScreen, setUpdateScreen] = useState(false); // this is used to toggle the update course modal
     const [addScreen, setAddScreen] = useState(false); //this is used to toggle the add new set modal
+    const [crsDataValid, setCrsDataValid] = useState(false); //for validating data submitted in update course modal
+    const [newSetValid, setNewSetValid] = useState(false); //for validating data submitted in delete course modal  
 
     // TODO: CLEAN UP THE CODE HERE
     useEffect(() => {
@@ -42,7 +46,7 @@ const MyCourse = () => {
             setMyCourse(course);//set the course to our local state variable
 
             // Individual course information put into local state.
-            setName(course.name);
+            setCrsName(course.name);
             setOrg(course.org);
             setTextBook(course.textbook);
             setActive(course.active);
@@ -79,7 +83,69 @@ const MyCourse = () => {
         return `/quizzey-set/${id}`;
     }
 
+    const handleCourseForm = (event) => {
+        const form = event.currentTarget;
+        let isInvalid = undefined;
+        console.log(form);
+        if (form.checkValidity() === false)//if our form results are not valid 
+        {
+            event.preventDefault();
+            event.stopPropagation();
+        }
 
+        setCrsDataValid(true);
+
+        if (crsName === "" || org === "" || textbook === "")
+        {
+            isInvalid = true;
+            return;
+        }
+
+        if (isInvalid !== true)
+        {
+            let data = {...myCourse};
+            
+            data.name = crsName;
+            data.org = org;
+            data.textbook = textbook;
+            data.active = active;
+            
+            console.log(data);
+
+            setMyCourse(data);
+            event.preventDefault();
+            setCrsDataValid(false);
+            hideCourseUpdateForm();
+        }
+    }
+
+    const handleSetForm = (event) => {
+        const form = event.currentTarget;
+        let isInvalid = undefined;
+        console.log(form);
+        if (form.checkValidity() === false)//if our form results are not valid 
+        {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+
+        setNewSetValid(true);
+
+        if (setName === "") 
+        {
+            isInvalid = true;
+            return;    
+        }
+
+        if (isInvalid !== true) 
+        {
+            // let data = {}
+            console.log(setName);
+            event.preventDefault();
+            setNewSetValid(false);
+            hideAddSetForm();
+        }
+    }
 
     // -------------TOGGLE FOR SHOWING/HIDING COURSE UPDATE FORM --------------
     const showCourseUpdateForm = () => {
@@ -94,31 +160,41 @@ const MyCourse = () => {
 
     const renderUpdateCourseForm = () => {
         return( 
-                <Form>
+                <Form noValidate validated={crsDataValid} onSubmit={handleCourseForm}>
                     <Form.Group className="mb-3">
                         <Form.Label>Course Name:</Form.Label>
                         <Form.Control placeholder="Course Name" 
-                                      onChange={(e) => setName(e.target.value)}
-                                      value={name} />
+                                      required
+                                      onChange={(e) => setCrsName(e.target.value)}
+                                      value={crsName} />
+                        <Form.Control.Feedback type="invalid">You need to input a course name!</Form.Control.Feedback>
                     </Form.Group>
                     <Form.Group className="mb-3">
                         <Form.Label>Organization:</Form.Label>
                         <Form.Control placeholder="Organization" 
+                                      required
                                       onChange={(e) => setOrg(e.target.value)} 
                                       value={org} />
+                        <Form.Control.Feedback type="invalid">You need to input an organization!</Form.Control.Feedback>
                     </Form.Group>
                     <Form.Group className="mb-3">
                         <Form.Label>Textbook:</Form.Label>
                         <Form.Control placeholder="Textbook"  
+                                      required
                                       onChange={(e) => setTextBook(e.target.value)}
                                       value={textbook}/>
+                        <Form.Control.Feedback type="invalid">You need to input a textbook!</Form.Control.Feedback>
                     </Form.Group>
                     <Form.Check
                         type="switch"
                         label="Active Course?"
+                        name="active"
+                        onChange={(e) => {setActive(e.target.checked)}}
                         defaultChecked={active}
+                        value={active}
                     />
-                    {/* <Button type="submit" onClick={(e) => handleCourseSave(e)}>Submit</Button> */}
+                    <Button variant="primary"  
+                            onClick={(e) => handleCourseForm(e)}>Submit</Button>
             </Form>
         );
     }
@@ -136,12 +212,18 @@ const MyCourse = () => {
 
     const renderAddSetForm = () => {
         return(
-            <Form>
+            <Form noValidate validated={newSetValid} onSubmit={handleSetForm}>
                 <Form.Group className="mb-3">
                     <Form.Label>Set Name:</Form.Label>
-                    <Form.Control placeholder="Set Name:"/>
+                    <Form.Control placeholder="Set Name:"
+                                  required
+                                  name="setName"
+                                  value={setName}
+                                  onChange={(e) => {setSName(e.target.value)}}/>
+                    <Form.Control.Feedback type="invalid">You need to input a set name!</Form.Control.Feedback>
                 </Form.Group>
-                {/* <Button type="submit" onClick={(e) => handleCourseSave(e)}>Submit</Button> */}
+                <Button variant="primary" 
+                        onClick={(e) => handleSetForm(e)}>Submit</Button>
             </Form>
         );
     }
@@ -176,11 +258,11 @@ const MyCourse = () => {
                 <ReusableModal show={updateScreen}
                                hide={hideCourseUpdateForm}
                                title={"Update Existing Course:"}
-                               body={renderUpdateCourseForm}/>                    
+                               body={renderUpdateCourseForm} />                    
                 <ReusableModal show={addScreen}
                                hide={hideAddSetForm}
                                title={"Add New Set:"}
-                               body={renderAddSetForm}/>
+                               body={renderAddSetForm} />
 
             </Row>            
             <hr />      
