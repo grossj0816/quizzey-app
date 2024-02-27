@@ -16,6 +16,7 @@ import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useEffect } from 'react';
 import Dropdown from 'react-bootstrap/Dropdown';
+import { getAllActiveCourses } from './../../services/apiService';
 
 
 const Dashboard = () => {
@@ -40,6 +41,8 @@ const Dashboard = () => {
         if (userInfo.user_metadata) {
             console.log('user info:', userInfo);
             setUserName(userInfo.user_metadata.nickname);
+
+            getAllActiveCourses();
         }
     }, [userInfo])
 

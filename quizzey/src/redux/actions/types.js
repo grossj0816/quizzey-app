@@ -1,2 +1,8 @@
 export const GET_USER_INFO = 'GET_USER_INFO';
 
+export const GET_ALL_ACTIVE_COURSES = 'GET_ALL_ACTIVE_COURSES';
+
+export const GET_COURSE_BY_CID = 'GET_COURSE_BY_CID';
+
+
+
