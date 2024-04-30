@@ -34,6 +34,7 @@ const ReusableModal = (props) => {
          size="lg"
          centered
          fullscreen={fullScreen}
+         scrollable={true}
         >
             <Modal.Header closeButton>
                 <Modal.Title id="contained-modal-title-vcenter">
