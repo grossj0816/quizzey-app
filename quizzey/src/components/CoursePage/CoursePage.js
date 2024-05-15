@@ -20,7 +20,7 @@ import Button from 'react-bootstrap/Button';
 const MyCourse = () => {
 
     let { id } = useParams(); //courseId
-    const myCourses = courseListHandler(); //THIS VARIABLE WOULD BE GETTING STATE FROM REDUX
+    // const myCourses = courseListHandler(); //THIS VARIABLE WOULD BE GETTING STATE FROM REDUX
     const [myCourse, setMyCourse] = useState({});
     const [quizzeySets, setQuizzeySets] = useState([]);
     const [ddValues, setDdValues] = useState([]);
@@ -33,6 +33,9 @@ const MyCourse = () => {
     const [addScreen, setAddScreen] = useState(false); //this is used to toggle the add new set modal
     const [crsDataValid, setCrsDataValid] = useState(false); //for validating data submitted in update course modal
     const [newSetValid, setNewSetValid] = useState(false); //for validating data submitted in delete course modal  
+    // const [courseUpdate, setCourseUpdate] = useState(false); 
+
+
 
     // TODO: CLEAN UP THE CODE HERE
     useEffect(() => {
@@ -41,22 +44,32 @@ const MyCourse = () => {
         // when the id value from useParams() is available
         if (id) 
         {
-            // find the course that belonggs the course id being passed in as path param
-            course = myCourses.find((course) => course.courseId === +id);
-            setMyCourse(course);//set the course to our local state variable
+            fetch(`${process.env.REACT_APP_QUIZZEY_API_ENDPOINT}/courses/${id}`,
+            {
+                method: 'GET'
+            })
+            .then(response => response.json())
+            .then(course => {
+                setMyCourse(course);
 
-            // Individual course information put into local state.
-            setCrsName(course.name);
-            setOrg(course.org);
-            setTextBook(course.textbook);
-            setActive(course.active);
+                // Individual course information used by update course form
+                setCrsName(course.courseName);
+                setOrg(course.organization);
+                setTextBook(course.textbook);
+                setActive(course.active);
+            })
+            // // find the course that belonggs the course id being passed in as path param
+            // course = myCourses.find((course) => course.courseId === +id);
+            // setMyCourse(course);//set the course to our local state variable
 
+            // TODO: After setting up course update process come back to this.
             sets = sets.filter((element) => element.courseId === +id);
             setDdValues(sets);
-            setQuizzeySets(sets);
+            setQuizzeySets([]);
         }
     }, [id])
     
+
 
     const handleDropdownSelect = (e) => {
         console.log("ID: ", e.target.value);
@@ -83,7 +96,7 @@ const MyCourse = () => {
         return `/quizzey-set/${id}`;
     }
 
-    const handleCourseForm = (event) => {
+    const handleCourseUpdate = (event) => {
         const form = event.currentTarget;
         let isInvalid = undefined;
         console.log(form);
@@ -105,21 +118,31 @@ const MyCourse = () => {
         {
             let data = {...myCourse};
             
-            data.name = crsName;
-            data.org = org;
+            data.courseName = crsName;
+            data.organization = org;
             data.textbook = textbook;
             data.active = active;
             
-            console.log(data);
+            console.log(JSON.stringify(data));
+
+            fetch(`${process.env.REACT_APP_QUIZZEY_API_ENDPOINT}/courses/${data.courseId}`,
+            {
+                method: 'PUT',
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8'
+                },
+                body: JSON.stringify(data)
+            })
 
             setMyCourse(data);
             event.preventDefault();
             setCrsDataValid(false);
             hideCourseUpdateForm();
+            // setCourseUpdate(true);
         }
     }
 
-    const handleSetForm = (event) => {
+    const handleSetSave = (event) => {
         const form = event.currentTarget;
         let isInvalid = undefined;
         console.log(form);
@@ -160,7 +183,7 @@ const MyCourse = () => {
 
     const renderUpdateCourseForm = () => {
         return( 
-                <Form noValidate validated={crsDataValid} onSubmit={handleCourseForm}>
+                <Form noValidate validated={crsDataValid} onSubmit={handleCourseUpdate}>
                     <Form.Group className="mb-3">
                         <Form.Label>Course Name:</Form.Label>
                         <Form.Control placeholder="Course Name" 
@@ -194,7 +217,7 @@ const MyCourse = () => {
                         value={active}
                     />
                     <Button variant="primary"  
-                            onClick={(e) => handleCourseForm(e)}>Submit</Button>
+                            onClick={(e) => handleCourseUpdate(e)}>Submit</Button>
             </Form>
         );
     }
@@ -212,7 +235,7 @@ const MyCourse = () => {
 
     const renderAddSetForm = () => {
         return(
-            <Form noValidate validated={newSetValid} onSubmit={handleSetForm}>
+            <Form noValidate validated={newSetValid} onSubmit={handleSetSave}>
                 <Form.Group className="mb-3">
                     <Form.Label>Set Name:</Form.Label>
                     <Form.Control placeholder="Set Name:"
@@ -223,7 +246,7 @@ const MyCourse = () => {
                     <Form.Control.Feedback type="invalid">You need to input a set name!</Form.Control.Feedback>
                 </Form.Group>
                 <Button variant="primary" 
-                        onClick={(e) => handleSetForm(e)}>Submit</Button>
+                        onClick={(e) => handleSetSave(e)}>Submit</Button>
             </Form>
         );
     }
@@ -233,10 +256,10 @@ const MyCourse = () => {
         <Header />
         <Container id="container">
             <Row>
-                <p id="coursetitle">{myCourse.name}</p>       
+                <p id="coursetitle">{myCourse.courseName}</p>       
                 <h5>
                     <Badge bg="secondary" pill>
-                    {myCourse.org}
+                    {myCourse.organization}
                     </Badge>
                 </h5>
             </Row>

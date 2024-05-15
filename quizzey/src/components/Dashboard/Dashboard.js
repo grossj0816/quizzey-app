@@ -62,14 +62,17 @@ const Dashboard = () => {
 
     //On saving a new course call courses 'GET' endpoint to get refresh list of active courses.
     useEffect(() => {
-            fetch(`${process.env.REACT_APP_QUIZZEY_API_ENDPOINT}/courses`,
+            if (courseSave === true) 
             {
-                method: 'GET'
-            })
-            .then(response => response.json())
-            .then(courses => {
-                setCourses(courses);
-            })
+                fetch(`${process.env.REACT_APP_QUIZZEY_API_ENDPOINT}/courses`,
+                {
+                    method: 'GET'
+                })
+                .then(response => response.json())
+                .then(courses => {
+                    setCourses(courses);
+                })   
+            }
     }, [courseSave]);
 
     const handleOpenCourseLink = (id) => {
@@ -102,7 +105,7 @@ const Dashboard = () => {
 
 
     const handleCourseSave = (e) => {
-        e.preventDefault();
+        // e.preventDefault();
         // console.log(name);
         // console.log(org);
         // console.log(textBook);
@@ -120,20 +123,8 @@ const Dashboard = () => {
         .catch(err => console.error(err))
         hideAddCourseForm();
         setShowB(true);
-        setCourseSave(true);
-        
-        // TODO: ADD MORE HERE WHEN WE DO SAVE COURSES 
+        setCourseSave(true);        
     }
-
-    // const handleCourseDelete = (e, courseId) => {
-        
-    //     //run the delete process
-    //     let filterResults = courses.filter((element) => element.courseId !== courseId);
-    //     setCourses(filterResults);
-
-    //     //TODO: ADD MORE HERE FOR SOFT DELETING COURSE
-    // } 
-
     
     //Rendering add new course modal
     const renderAddCourseForm = () => {
@@ -259,7 +250,6 @@ const Dashboard = () => {
                     })
                     }
                 </Row>
-                {/* TODO: Update the keys on mapping */}
                 <Row className="rowSpacing">
                     <p id="coursesTitle">Recently opened:</p>
                 </Row>
