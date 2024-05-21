@@ -120,7 +120,8 @@ const Dashboard = () => {
             method: 'POST',
             body: JSON.stringify(newCourse)
         })
-        .catch(err => console.error(err))
+        .catch(err => console.error(err));
+
         hideAddCourseForm();
         setShowB(true);
         setCourseSave(true);        

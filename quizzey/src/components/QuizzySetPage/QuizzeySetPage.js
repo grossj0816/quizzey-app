@@ -17,6 +17,7 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import React from "react";
+import { useSelector } from "react-redux";
 
 
 
@@ -42,8 +43,19 @@ const QuizzeySet = () => {
     const [isSetValid, setIsSetValid] = useState(false); //state for validating updating set data.
     const [deleteOperation, setDeleteOperation] = useState(false); //state of displaying hidden elements for marking question for deletion
     const [updateOperation, setUpdateOperation] = useState(false); //state of displaying hidden elements for allowing updating questions.
+    const [userName, setUserName] = useState("");
+    const userInfo = useSelector(state => state.userInfo.getUserInfo);
 
 
+
+    //As soon as we have the user metadata stored in redux...
+    useEffect(() => {
+        // store value in local state in Dashboard component for saving new courses.
+        if (userInfo.user_metadata) {
+            console.log('user info:', userInfo);
+            setUserName(userInfo.user_metadata.nickname);
+        }
+    },[]);
 
     useEffect(() => {
         const handleWindowResize = () => {
@@ -78,7 +90,7 @@ const QuizzeySet = () => {
         const sets =  quizzeySetHandler();
         //find the set with the same setID that we are getting from the url path param
         set = sets.find((set) => set.setId === +id);
-        setName(set.name);
+        setName(set.setName);
         setActive(set.active);
         setQuizzeySet(set);
 
@@ -367,9 +379,14 @@ const QuizzeySet = () => {
 
         if (isInvalid !== true) 
         {
+            //TODO: Test this after updating the useEffect above...
+            // let data = {setId: id, setName: name, active: active, createdBy: userName};
             let data = {...quizzeySet};
-            data.name = name;
-            // console.log(data);
+
+            data.setName = name;
+            data.active = active;
+            
+            console.log(data);
             setQuizzeySet(data);
             event.preventDefault();
             setIsSetValid(false); //reset the validated state for the next form submit.
@@ -585,7 +602,7 @@ const QuizzeySet = () => {
         <Container id="container">
             <Row>
                 <Col sm={{span:6, offset:0}} md={{span:3, offset:0}} lg={{span:3, offset:0}}>
-                    <h4>{quizzeySet.name}</h4>
+                    <h4>{quizzeySet.setName}</h4>
                 </Col>
             </Row>
             <Row>

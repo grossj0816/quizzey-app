@@ -39,7 +39,7 @@ export const quizzeySetHandler = () => {
         {
             setId: 1,
             courseId: 1,
-            name: "Human Anatomy Chapter 1",
+            setName: "Human Anatomy Chapter 1",
             count: 20,
             userName: "Elly",
             active: true
@@ -47,7 +47,7 @@ export const quizzeySetHandler = () => {
         {
             setId: 2,
             courseId: 1,
-            name: "Human Anatomy Chapter 2",
+            setName: "Human Anatomy Chapter 2",
             count: 18,
             userName: "Elly",
             active: true
@@ -55,7 +55,7 @@ export const quizzeySetHandler = () => {
         {
             setId: 3,
             courseId: 1,
-            name: "Human Anatomy Chapter 3",
+            setName: "Human Anatomy Chapter 3",
             count: 30,
             userName: "Elly",
             active: true
@@ -63,7 +63,7 @@ export const quizzeySetHandler = () => {
         {
             setId: 4,
             courseId: 1,
-            name: "Human Anatomy Chapter 4",
+            setName: "Human Anatomy Chapter 4",
             count: 10,
             userName: "Elly",
             active: true
@@ -71,42 +71,42 @@ export const quizzeySetHandler = () => {
         {
             setId: 5,
             courseId: 2,
-            name: "Paramedic Field Clinical Chapter 1",
+            setName: "Paramedic Field Clinical Chapter 1",
             count: 10,
             userName: "Elly"
         },
         {
             setId: 6,
             courseId: 2,
-            name: "Paramedic Field Clinical Chapter 2",
+            setName: "Paramedic Field Clinical Chapter 2",
             count: 10,
             userName: "Elly"
         },
         {
             setId: 7,
             courseId: 2,
-            name: "Paramedic Field Clinical Chapter 3",
+            setName: "Paramedic Field Clinical Chapter 3",
             count: 10,
             userName: "Elly"
         },
         {
             setId: 8,
             courseId: 2,
-            name: "Paramedic Field Clinical Chapter 4",
+            setName: "Paramedic Field Clinical Chapter 4",
             count: 10,
             userName: "Elly"
         },
         {
             setId: 9,
             courseId: 3,
-            name: "Paramedic Hospital Clinical Chapter 1",
+            setName: "Paramedic Hospital Clinical Chapter 1",
             count: 10,
             userName: "Elly"
         },
         {
             setId: 10,
             courseId: 3,
-            name: "Paramedic Hospital Clinical Chapter 1",
+            setName: "Paramedic Hospital Clinical Chapter 1",
             count: 10,
             userName: "Elly"
         }

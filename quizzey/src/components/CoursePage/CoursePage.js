@@ -15,15 +15,17 @@ import {handleUserIcon} from "../../utils/utils.js";
 import { Link } from "react-router-dom";
 import Dropdown from 'react-bootstrap/Dropdown';
 import Button from 'react-bootstrap/Button';
+import { useSelector } from "react-redux";
 
 
 const MyCourse = () => {
 
     let { id } = useParams(); //courseId
-    // const myCourses = courseListHandler(); //THIS VARIABLE WOULD BE GETTING STATE FROM REDUX
+    const [isSubmitted, setIsSubmitted] = useState(false);
     const [myCourse, setMyCourse] = useState({});
-    const [quizzeySets, setQuizzeySets] = useState([]);
-    const [ddValues, setDdValues] = useState([]);
+    const [quizzeySets, setQuizzeySets] = useState([]); //this stores a local state of the quizzey sets by the cID set on component.
+    const [ddValues, setDdValues] = useState([]); //will hold similar data to the state var above, but manages the list
+    const [crsId, setCrsId] = useState(0);
     const [crsName, setCrsName] = useState("");
     const [org, setOrg] = useState("");
     const [textbook, setTextBook] = useState("");
@@ -33,8 +35,18 @@ const MyCourse = () => {
     const [addScreen, setAddScreen] = useState(false); //this is used to toggle the add new set modal
     const [crsDataValid, setCrsDataValid] = useState(false); //for validating data submitted in update course modal
     const [newSetValid, setNewSetValid] = useState(false); //for validating data submitted in delete course modal  
-    // const [courseUpdate, setCourseUpdate] = useState(false); 
+    const [userName, setUserName] = useState("");
+    const userInfo = useSelector(state => state.userInfo.getUserInfo);
 
+
+    //As soon as we have the user metadata stored in redux...
+    useEffect(() => {
+        // store value in local state in Dashboard component for saving new courses.
+        if (userInfo.user_metadata) {
+            console.log('user info:', userInfo);
+            setUserName(userInfo.user_metadata.nickname);
+        }
+    },[]);
 
 
     // TODO: CLEAN UP THE CODE HERE
@@ -53,6 +65,7 @@ const MyCourse = () => {
                 setMyCourse(course);
 
                 // Individual course information used by update course form
+                setCrsId(course.courseId);
                 setCrsName(course.courseName);
                 setOrg(course.organization);
                 setTextBook(course.textbook);
@@ -62,12 +75,19 @@ const MyCourse = () => {
             // course = myCourses.find((course) => course.courseId === +id);
             // setMyCourse(course);//set the course to our local state variable
 
-            // TODO: After setting up course update process come back to this.
-            sets = sets.filter((element) => element.courseId === +id);
-            setDdValues(sets);
-            setQuizzeySets([]);
+            // TODO: WORK ON THIS!!!
+            // sets = sets.filter((element) => element.courseId === +id);
+            fetch(`${process.env.REACT_APP_QUIZZEY_API_ENDPOINT}/sets/${id}`, {
+                method: 'GET'
+            })
+            .then(response => response.json())
+            .then(sets => {
+                setDdValues(sets);
+                setQuizzeySets(sets);
+
+            });
         }
-    }, [id])
+    }, [id]);
     
 
 
@@ -77,7 +97,7 @@ const MyCourse = () => {
         const setId = e.target.value;
 
         //get list of quizzey sets TODO: Make a way for quizzey sets to be stored remotely so I'm not making multiple local variables call from quizzeySetHandler();
-        let sets = quizzeySetHandler();
+        let sets = [...ddValues];
         
         // if we reselect back on the placeholder option, this will show all sets fron our course
         if(+setId === 0) 
@@ -87,7 +107,7 @@ const MyCourse = () => {
         else //we filter through the quizzey sets and update the screen with the set we selected in the dd.
         {
             //find the quizzey set
-            setQuizzeySets( sets.filter((element, index) => element.setId === +setId));
+            setQuizzeySets(sets.filter((element, index) => element.setId === +setId));
         }
     }
 
@@ -125,7 +145,7 @@ const MyCourse = () => {
             
             console.log(JSON.stringify(data));
 
-            fetch(`${process.env.REACT_APP_QUIZZEY_API_ENDPOINT}/courses/${data.courseId}`,
+            fetch(`${process.env.REACT_APP_QUIZZEY_API_ENDPOINT}/courses`,
             {
                 method: 'PUT',
                 headers: {
@@ -133,6 +153,7 @@ const MyCourse = () => {
                 },
                 body: JSON.stringify(data)
             })
+            .catch(e => console.error("There was an error:" + e)); 
 
             setMyCourse(data);
             event.preventDefault();
@@ -162,11 +183,28 @@ const MyCourse = () => {
 
         if (isInvalid !== true) 
         {
-            // let data = {}
-            console.log(setName);
-            event.preventDefault();
+            let newSet = {courseId: crsId, setName: setName, active: true, createdBy: userName};
+            console.log(JSON.stringify(newSet));
+
+            fetch(`${process.env.REACT_APP_QUIZZEY_API_ENDPOINT}/sets`, {
+                method: 'POST',
+                body: JSON.stringify(newSet)
+            })
+            .catch(e => console.error("There was an error:" + e)); 
+
+            fetch(`${process.env.REACT_APP_QUIZZEY_API_ENDPOINT}/sets/${id}`, {
+                method: 'GET'
+            })
+            .then(response => response.json())
+            .then(sets => { 
+                setDdValues(sets);
+                setQuizzeySets(sets);
+            });
+
+            setSName("");
             setNewSetValid(false);
             hideAddSetForm();
+            window.location.reload();
         }
     }
 
@@ -299,7 +337,7 @@ const MyCourse = () => {
                             {
                                 ddValues.map((element, index) => {
                                     return(
-                                        <option key={element.setId} value={element.setId}>{element.name}</option>
+                                        <option key={element.setId} value={element.setId}>{element.setName}</option>
                                     )
                                 })
                             }
@@ -312,11 +350,14 @@ const MyCourse = () => {
             <Row className="rowSpacing">
                 {
                     quizzeySets.map((element, index) => {
-                        return(
-                            <Col xs={{span:10, offset:0}} sm={{span:6, offset:0}} md={{span:6, offset:0}} lg={{span:6, offset:0}}>
-                                <ReusableCard title={element.name} text={element.userName} image={handleUserIcon()} setLink={handleSetLink(element.setId)}/> 
-                            </Col>                             
-                        )
+                        if(index < 4)
+                        {
+                            return(
+                                <Col xs={{span:10, offset:0}} sm={{span:6, offset:0}} md={{span:6, offset:0}} lg={{span:6, offset:0}}>
+                                    <ReusableCard title={element.setName} text={element.userName} image={handleUserIcon()} setLink={handleSetLink(element.setId)}/> 
+                                </Col>                             
+                            )
+                        }
                     })
                 }
             </Row>
