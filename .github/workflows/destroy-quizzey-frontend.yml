@@ -16,7 +16,7 @@ jobs:
        steps:
         # Checks out repository
          - name: Git checkout
-           uses: actions/checkout@v3
+           uses: actions/checkout@v4
          
         # Configure aws account credentials so we can run terraform commands on aws.          
          - name: Configure AWS Credentials

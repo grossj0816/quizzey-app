@@ -23,7 +23,7 @@ jobs:
         
         #Checks out your repository
         - name: Git checkout
-          uses: actions/checkout@v3
+          uses: actions/checkout@v4
 
         #Install packages
         - name: Install packages
