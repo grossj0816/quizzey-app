@@ -75,27 +75,48 @@ const QuizzeySet = () => {
       let set = {};
       if (id) 
       {
-        //get all questions-----------------------------------------------------------------
-        const questionList = listQuestionsHandler();
-        //filter through questions and get the q's under this quizzey set
-        questions = questionList.filter((element) => element.setId === +id);
-        //loop through questions and add a question number
-        questions.forEach((element, index) => {
-            element.questionNumber = index + 1;
+
+        //fetch ind set for header------------------------------------------------------------
+        fetch(`${process.env.REACT_APP_QUIZZEY_API_ENDPOINT}/set/${id}`, {
+            method: 'GET'
+        })
+        .then(response => response.json())
+        .then(set => {
+            setName(set.setName);
+            setActive(set.active);
+            setQuizzeySet(set);
+
+            handleRecentSets(set);
+
         });
-        console.log("Qs w/ count: ", questions);
-        setQuestions(questions);
 
-        //get all sets----------------------------------------------------------------------
-        const sets =  quizzeySetHandler();
-        //find the set with the same setID that we are getting from the url path param
-        set = sets.find((set) => set.setId === +id);
-        setName(set.setName);
-        setActive(set.active);
-        setQuizzeySet(set);
+        //get all questions-----------------------------------------------------------------
+        // const questionList = listQuestionsHandler();
+        // //filter through questions and get the q's under this quizzey set
+        // questions = questionList.filter((element) => element.setId === +id);
+        // //loop through questions and add a question number
+        // questions.forEach((element, index) => {
+        //     element.questionNumber = index + 1;
+        // });
+        // console.log("Qs w/ count: ", questions);
+        // setQuestions(questions);
+        fetch(`${process.env.REACT_APP_QUIZZEY_API_ENDPOINT}/questions/${id}`,
+        {
+            method: 'GET'
+        })
+        .then(response => response.json())
+        .then(questions => {
+            if(questions.length >= 1)
+            {
+                questions.forEach((element, index) => {
+                    element.questionNumber = index + 1;
+                });
+                console.log("Qs w/ count: ", questions);
+                setQuestions(questions);
+            }
+        });
 
-        // TODO: Set up this in the dashboard at some point.
-        handleRecentSets(set);
+
         //get total number of questions-----------------------------------------------------
         setTotal(questions.length);
       }
@@ -258,7 +279,6 @@ const QuizzeySet = () => {
 
     const handleDeleteSwitch = (event, index) => {
         let data = [...questions];
-        // console.log("SWITCH CHANGE:", event.target.checked);
         data[index][event.target.name] = event.target.checked;
         setQuestions(data);
     }
@@ -296,20 +316,25 @@ const QuizzeySet = () => {
             {
                 //if there are no errors, we set flag to false.
                 isInvalid = false;
+                
+                item.setId = id;
+                item.createdBy = userName;
             }
         });
 
         // if all the records are valid...
         if (isInvalid !== true)
         {
-            /*
-            TODO: AT SOME POINT PUT SOMETHING HERE FOR PROCESSING
-            SUBMITTING QUESTIONS TO THE DATABASE. 
-            */
-            event.preventDefault();
+            fetch(`${process.env.REACT_APP_QUIZZEY_API_ENDPOINT}/questions`, {
+                method: 'POST',
+                body: JSON.stringify(inputFields)
+            })
+            .catch(err => console.error(err));
+
             console.log(inputFields);
             setValidated(false); //reset the validated state for the next form submit.
             hideAddQuestionsForm();//hide the modal and reset the form.
+            window.location.reload();
         }
     };
 

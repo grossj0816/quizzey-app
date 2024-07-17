@@ -6,7 +6,7 @@ import "./css/Dashboard.css"
 import React, { useState } from 'react';
 import { courseListHandler, quizzeySetHandler } from "../../services/jsonService";
 import ReusableCard from "../common/reusableCard";
-import { handleUserIcon} from "../../utils/utils.js";
+import { adjustTextWidth, handleUserIcon} from "../../utils/utils.js";
 import ReusableModal from "../common/reusableModal";
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
@@ -111,6 +111,9 @@ const Dashboard = () => {
         // console.log(textBook);
         // console.log(userName);
         
+        hideAddCourseForm();
+        setShowB(true);
+
         let newCourse = {courseName: name, organization: org, textbook: textBook, active: true, createdBy: userName};
 
         // console.log(JSON.stringify(newCourse));
@@ -121,9 +124,6 @@ const Dashboard = () => {
             body: JSON.stringify(newCourse)
         })
         .catch(err => console.error(err));
-
-        hideAddCourseForm();
-        setShowB(true);
         setCourseSave(true);        
     }
     
@@ -241,7 +241,7 @@ const Dashboard = () => {
                                 <Col  key={element.courseId} xs={{span:10, offset:0}} sm={{span:6, offset:0}} md={{span:6, offset:0}} lg={{span:6, offset:0}}>
                                     <ReusableCard title={element.courseName} 
                                                   subtitle={element.organization} 
-                                                  text={element.textbook} 
+                                                //   text={element.textbook} 
                                                   courseLink={handleOpenCourseLink(element.courseId)}/> 
                                 </Col> 
                             );

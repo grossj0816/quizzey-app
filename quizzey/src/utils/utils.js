@@ -22,7 +22,7 @@ export const adjustTextWidth = (width, text) => {
         return text.length >= 25 ? text.slice(0,25) + "..." : text; 
     }
     else{
-        return text;
+        return text.length >= 30 ? text.slice(0,25) + "..." : text; 
     }
 }
 

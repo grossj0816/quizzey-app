@@ -75,8 +75,7 @@ const MyCourse = () => {
             // course = myCourses.find((course) => course.courseId === +id);
             // setMyCourse(course);//set the course to our local state variable
 
-            // TODO: WORK ON THIS!!!
-            // sets = sets.filter((element) => element.courseId === +id);
+            sets = sets.filter((element) => element.courseId === +id);
             fetch(`${process.env.REACT_APP_QUIZZEY_API_ENDPOINT}/sets/${id}`, {
                 method: 'GET'
             })
@@ -159,7 +158,6 @@ const MyCourse = () => {
             event.preventDefault();
             setCrsDataValid(false);
             hideCourseUpdateForm();
-            // setCourseUpdate(true);
         }
     }
 
@@ -186,7 +184,7 @@ const MyCourse = () => {
             let newSet = {courseId: crsId, setName: setName, active: true, createdBy: userName};
             console.log(JSON.stringify(newSet));
 
-            fetch(`${process.env.REACT_APP_QUIZZEY_API_ENDPOINT}/sets`, {
+            fetch(`${process.env.REACT_APP_QUIZZEY_API_ENDPOINT}/set`, {
                 method: 'POST',
                 body: JSON.stringify(newSet)
             })

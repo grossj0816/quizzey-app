@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react';
 import "./css/reusableCard.css";
 import Badge from 'react-bootstrap/Badge';
 import { Link } from "react-router-dom";
+import OverlayTrigger  from "react-bootstrap/OverlayTrigger";
+import Tooltip from 'react-bootstrap/Tooltip';
 
 
 
@@ -40,7 +42,13 @@ const ReusableCard = (props) => {
         >
             <Card.Body>
                 <center>
-                    <Card.Title><i>{adjustTextWidth(innerWidth, title)}</i></Card.Title>
+                    <OverlayTrigger
+                        placement="top"
+                        delay={{show: 250, hide: 400}}
+                        overlay={<Tooltip>{title}</Tooltip>}
+                    >
+                        <Card.Title><i>{adjustTextWidth(innerWidth, title)}</i></Card.Title>
+                    </OverlayTrigger>
                     {
                         subtitle &&
                         <Card.Subtitle className="mb-2 text-muted">
