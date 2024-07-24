@@ -21,7 +21,7 @@ import { useSelector } from "react-redux";
 const MyCourse = () => {
 
     let { id } = useParams(); //courseId
-    const [isSubmitted, setIsSubmitted] = useState(false);
+    const [qsetSaved, setQsetSaved] = useState(false); //flag that gets flipped when a new set is saved.
     const [myCourse, setMyCourse] = useState({});
     const [quizzeySets, setQuizzeySets] = useState([]); //this stores a local state of the quizzey sets by the cID set on component.
     const [ddValues, setDdValues] = useState([]); //will hold similar data to the state var above, but manages the list
@@ -46,7 +46,7 @@ const MyCourse = () => {
             console.log('user info:', userInfo);
             setUserName(userInfo.user_metadata.nickname);
         }
-    },[]);
+    });
 
 
     // TODO: CLEAN UP THE CODE HERE
@@ -88,6 +88,20 @@ const MyCourse = () => {
         }
     }, [id]);
     
+    useEffect(() => {
+        if (qsetSaved === true)
+        {
+            fetch(`${process.env.REACT_APP_QUIZZEY_API_ENDPOINT}/sets/${id}`, {
+                method: 'GET'
+            })
+            .then(response => response.json())
+            .then(sets => { 
+                setDdValues(sets);
+                setQuizzeySets(sets);
+                setQsetSaved(false);
+            });
+        }
+    }, [qsetSaved]);
 
 
     const handleDropdownSelect = (e) => {
@@ -190,19 +204,10 @@ const MyCourse = () => {
             })
             .catch(e => console.error("There was an error:" + e)); 
 
-            fetch(`${process.env.REACT_APP_QUIZZEY_API_ENDPOINT}/sets/${id}`, {
-                method: 'GET'
-            })
-            .then(response => response.json())
-            .then(sets => { 
-                setDdValues(sets);
-                setQuizzeySets(sets);
-            });
-
             setSName("");
             setNewSetValid(false);
             hideAddSetForm();
-            window.location.reload();
+            setQsetSaved(true);
         }
     }
 
@@ -348,14 +353,11 @@ const MyCourse = () => {
             <Row className="rowSpacing">
                 {
                     quizzeySets.map((element, index) => {
-                        if(index < 4)
-                        {
                             return(
                                 <Col xs={{span:10, offset:0}} sm={{span:6, offset:0}} md={{span:6, offset:0}} lg={{span:6, offset:0}}>
                                     <ReusableCard title={element.setName} text={element.userName} image={handleUserIcon()} setLink={handleSetLink(element.setId)}/> 
                                 </Col>                             
                             )
-                        }
                     })
                 }
             </Row>

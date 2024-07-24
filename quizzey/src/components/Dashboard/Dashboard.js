@@ -71,6 +71,7 @@ const Dashboard = () => {
                 .then(response => response.json())
                 .then(courses => {
                     setCourses(courses);
+                    setCourseSave(false);
                 })   
             }
     }, [courseSave]);

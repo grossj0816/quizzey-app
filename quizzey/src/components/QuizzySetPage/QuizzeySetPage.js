@@ -30,7 +30,7 @@ const QuizzeySet = () => {
     const [name, setName] = useState("");
     const [active, setActive] =useState(false);
     const [questions, setQuestions] = useState([]);
-    const [count, setCount] = useState(1); //the number count of what question we are currently on
+    const [count, setCount] = useState(0); //the number count of what question we are currently on
     const [total, setTotal] = useState();
     const [flipped, setFlipped] = useState(false);
     const [progress, setProgress] = useState(0);
@@ -331,10 +331,10 @@ const QuizzeySet = () => {
             })
             .catch(err => console.error(err));
 
-            console.log(inputFields);
+            console.log(JSON.stringify(inputFields));
             setValidated(false); //reset the validated state for the next form submit.
             hideAddQuestionsForm();//hide the modal and reset the form.
-            window.location.reload();
+            // window.location.reload();
         }
     };
 
@@ -409,12 +409,22 @@ const QuizzeySet = () => {
             let data = {...quizzeySet};
 
             data.setName = name;
-            data.active = active;
-            
+            data.active = active;            
             console.log(data);
+
+            fetch(`${process.env.REACT_APP_QUIZZEY_API_ENDPOINT}/set`,
+            {
+                method: 'PUT',
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8'
+                },
+                body: JSON.stringify(data)
+            })
+            .catch(e => console.error("There was an error:" + e));
+
             setQuizzeySet(data);
             event.preventDefault();
-            setIsSetValid(false); //reset the validated state for the next form submit.
+            setIsSetValid(false);
             hideUpdateSetForm();
         }
     }
