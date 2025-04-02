@@ -46,6 +46,10 @@ jobs:
            aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
            aws-region: ${{ secrets.AWS_REGION }}
 
+        # Setup Terraform
+        - name: Setup Terraform
+          uses: hashicorp/setup-terraform@v3
+
         #Deploy terraform code to provision infrastructure
         - name: Deploy Terraform
           working-directory:  ./quizzey/terraform
